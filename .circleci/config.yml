@@ -1,0 +1,46 @@
+version: 2
+jobs:
+  install:
+    docker:
+      - image: circleci/node:12.2.0
+    steps:
+      - checkout
+      - run: make install
+      - persist_to_workspace:
+          root: /home/circleci/project/
+          paths:
+            - node_modules
+
+  lint:
+    docker:
+      - image: circleci/node:12.2.0
+    steps:
+      - checkout
+      - attach_workspace:
+          at: /home/circleci/project
+      - run: make lint
+
+  build:
+    docker:
+      - image: circleci/node:12.2.0
+    steps:
+      - checkout
+      - attach_workspace:
+          at: /home/circleci/project
+      - run: make build
+      - persist_to_workspace:
+          root: /home/circleci/project/
+          paths:
+            - build
+
+workflows:
+  version: 2
+  test_build_deploy:
+    jobs:
+      - install
+      - lint:
+          requires:
+            - install
+      - build:
+          requires:
+            - install
