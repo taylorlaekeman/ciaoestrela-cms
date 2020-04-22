@@ -1,0 +1,47 @@
+{
+    "env": {
+        "browser": true,
+        "es6": true
+    },
+    "extends": [
+        "plugin:react/recommended",
+        "airbnb",
+	"prettier"
+    ],
+    "globals": {
+        "Atomics": "readonly",
+        "SharedArrayBuffer": "readonly"
+    },
+    "parserOptions": {
+        "ecmaFeatures": {
+            "jsx": true
+        },
+        "ecmaVersion": 2018,
+        "sourceType": "module"
+    },
+    "overrides": [
+      {
+        "files": ["src/serviceWorker.js"],
+        "rules": {
+          "no-console": "off",
+          "no-param-reassign": "off"
+        }
+      }
+    ],
+    "plugins": [
+        "react",
+        "prettier"
+    ],
+    "rules": {
+      "react/jsx-filename-extension": [1, {"extensions": [".js", ".jsx"]}],
+      "no-use-before-define": "off",
+      "prettier/prettier": "error"
+    },
+    "settings": {
+      "import/resolver": {
+        "node": {
+          "paths": ["src"]
+        }
+      }
+    }
+}
