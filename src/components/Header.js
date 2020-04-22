@@ -20,15 +20,11 @@ const Description = styled.p`
   margin: 0;
 `;
 
-const Header = () => {
-  return (
-    <Container>
-      <Title>Ciao, Estrela Co.</Title>
-      <Description>Admin panel</Description>
-    </Container>
-  );
-};
-
-Header.propTypes = {};
+const Header = () => (
+  <Container>
+    <Title>Ciao, Estrela Co.</Title>
+    <Description>Admin panel</Description>
+  </Container>
+);
 
 export default Header;
