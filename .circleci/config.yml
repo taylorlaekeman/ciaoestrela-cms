@@ -27,6 +27,7 @@ jobs:
       - checkout
       - attach_workspace:
           at: /home/circleci/project
+      - run: npm ls eslint
       - run: make build
       - persist_to_workspace:
           root: /home/circleci/project/
