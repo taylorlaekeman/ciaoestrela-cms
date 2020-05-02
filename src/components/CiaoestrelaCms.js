@@ -5,10 +5,8 @@ import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 
 import Header from 'components/Header';
-import {
-  actions as orderActions,
-  selectors as orderSelectors,
-} from 'state/orders';
+import { actions as authActions, selectors as authSelectors } from 'state/auth';
+import { actions as orderActions } from 'state/orders';
 
 const Wrapper = styled.div`
   box-sizing: border-box;
@@ -18,15 +16,17 @@ const Wrapper = styled.div`
 
 const CiaoestrelaCms = () => {
   const { authState, authService } = useOktaAuth();
-  const getDispatch = useDispatch();
-  const isFetchingOrders = useSelector(orderSelectors.isFetchingOrders);
+  const dispatch = useDispatch();
   const { pathname } = useLocation();
+  const token = useSelector(authSelectors.selectToken);
 
   useEffect(() => {
-    getDispatch((dispatch) => {
-      dispatch(orderActions.fetchOrders());
-    });
-  }, [getDispatch]);
+    dispatch(authActions.saveToken(authState.accessToken));
+  }, [dispatch, authState.accessToken]);
+
+  useEffect(() => {
+    if (token) dispatch(orderActions.fetchOrders());
+  }, [dispatch, token]);
 
   if (authState.isPending) return <div>loading...</div>;
 
@@ -36,9 +36,6 @@ const CiaoestrelaCms = () => {
         login
       </button>
     );
-
-  console.log({ isFetchingOrders });
-  console.log(authState.accessToken);
 
   return (
     <Wrapper>
