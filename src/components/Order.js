@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import styled from 'styled-components';
 
-import OrderItem from 'components/OrderItem';
+import CustomCard from 'components/CustomCard';
 
 const ClickableOrder = styled.button`
   background: none;
@@ -13,50 +13,93 @@ const ClickableOrder = styled.button`
 `;
 
 const Contact = styled.p`
-  font-size: 0.8rem;
-  font-weight: 500;
+  font-size: 0.9rem;
+  font-weight: 600;
   margin: 0;
   margin-bottom: 8px;
+`;
+
+const CreatedDate = styled.p`
+  font-size: 0.7rem;
+  font-weight: 300;
+  margin: 0;
+  margin-bottom: 16px;
+`;
+
+const CustomCardTitle = styled.h3`
+  font-weight: 500;
+  margin: 0;
+  margin-bottom: 20px;
 `;
 
 const Destination = styled.p`
   font-size: 0.7rem;
-  font-weight: 400;
+  font-weight: 300;
   margin: 0;
-  margin-bottom: 8px;
+  margin-bottom: 20px;
 `;
 
+const formatDate = (serverDate) => {
+  const date = new Date(serverDate);
+  return `${MONTHS[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`;
+};
+
 const ItemCount = styled.p`
+  background-color: ${(props) => props.theme.colours.background.customCard};
+  border-radius: 16px;
+  color: ${(props) => props.theme.colours.text.customCard};
+  font-weight: 600;
   font-size: 0.7rem;
-  font-weight: 400;
+  padding: 4px 10px;
   margin: 0;
+  width: max-content;
 `;
 
 const ItemList = styled.ul`
+  border-left: solid 8px ${(props) => props.theme.colours.border.customCard};
+  border-right: solid 8px ${(props) => props.theme.colours.border.customCard};
   list-style: none;
-  margin: 0;
-  padding: 0;
+  margin: 0 -20px;
+  padding: 8px 12px;
 `;
 
 const ListOrder = styled.li`
-  ${(props) =>
-    props.isSelected &&
-    `background-color: ${props.theme.colours.page.background};`}
+  background-color: ${(props) => props.theme.colours.background.order};
+  box-shadow: ${(props) => props.theme.boxShadow.medium};
+  margin: 0 20px;
+  margin-bottom: 20px;
 
   &:hover {
-    background-color: ${(props) => props.theme.colours.page.background};
+    box-shadow: ${(props) => props.theme.boxShadow.high};
   }
 `;
+
+const MONTHS = [
+  'January',
+  'February',
+  'March',
+  'April',
+  'May',
+  'June',
+  'July',
+  'August',
+  'September',
+  'October',
+  'November',
+  'December',
+];
 
 const Order = ({ isSelected, onSelect, order }) => (
   <ListOrder isSelected={isSelected}>
     <ClickableOrder onClick={onSelect}>
+      <CreatedDate>{formatDate(order.createdDate)}</CreatedDate>
       <Contact>{order.contact}</Contact>
       <Destination>{order.destination}</Destination>
       {isSelected ? (
         <ItemList>
+          <CustomCardTitle>custom cards</CustomCardTitle>
           {order.items.map((item) => (
-            <OrderItem
+            <CustomCard
               item={item}
               key={`${item.type}-${item.paper}-${item.ideas}`}
             />
@@ -64,7 +107,9 @@ const Order = ({ isSelected, onSelect, order }) => (
         </ItemList>
       ) : (
         <ItemCount>
-          {`${order.items.length} item${order.items.length === 1 ? '' : 's'}`}
+          {`${order.items.length} custom card${
+            order.items.length === 1 ? '' : 's'
+          }`}
         </ItemCount>
       )}
     </ClickableOrder>
@@ -76,8 +121,15 @@ Order.propTypes = {
   onSelect: PropTypes.func.isRequired,
   order: PropTypes.shape({
     contact: PropTypes.string.isRequired,
+    createdDate: PropTypes.string.isRequired,
     destination: PropTypes.string.isRequired,
-    items: PropTypes.arrayOf(PropTypes.string).isRequired,
+    items: PropTypes.arrayOf(
+      PropTypes.shape({
+        ideas: PropTypes.string.isRequired,
+        paper: PropTypes.string.isRequired,
+        type: PropTypes.string.isRequired,
+      })
+    ).isRequired,
   }).isRequired,
 };
 

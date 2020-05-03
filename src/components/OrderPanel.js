@@ -14,12 +14,6 @@ const OrderList = styled.ul`
   padding: 0;
 `;
 
-const Panel = styled.article`
-  background-color: ${(props) => props.theme.colours.panel.background};
-  margin: 20px;
-  padding: 30px 20px;
-`;
-
 const Title = styled.h2`
   font-size: 1.3rem;
   font-weight: 400;
@@ -39,16 +33,16 @@ const OrderPanel = () => {
 
   if (isFetchingOrders)
     return (
-      <Panel>
+      <article>
         <header>
           <Title>Orders</Title>
         </header>
         <p>loading...</p>
-      </Panel>
+      </article>
     );
 
   return (
-    <Panel>
+    <article>
       <header>
         <Title>Orders</Title>
       </header>
@@ -62,7 +56,7 @@ const OrderPanel = () => {
           />
         ))}
       </OrderList>
-    </Panel>
+    </article>
   );
 };
 
