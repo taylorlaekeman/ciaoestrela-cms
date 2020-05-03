@@ -47,7 +47,7 @@ const OrderPanel = () => {
         <Title>Orders</Title>
       </header>
       <OrderList>
-        {orders.map((order) => (
+        {Object.values(orders).map((order) => (
           <Order
             isSelected={order.id === selectedOrder}
             key={order.id}
