@@ -27,9 +27,11 @@ const CreatedDate = styled.p`
 `;
 
 const CustomCardTitle = styled.h3`
+  border-bottom: solid ${(props) => props.theme.colours.border.customCard} 4px;
   font-weight: 500;
   margin: 0;
-  margin-bottom: 20px;
+  margin-bottom: 16px;
+  width: max-content;
 `;
 
 const Destination = styled.p`
@@ -56,8 +58,8 @@ const ItemCount = styled.p`
 `;
 
 const ItemList = styled.ul`
-  border-left: solid 8px ${(props) => props.theme.colours.border.customCard};
-  border-right: solid 8px ${(props) => props.theme.colours.border.customCard};
+  border-left: solid ${(props) => props.theme.colours.border.customCard} 8px;
+  border-right: solid ${(props) => props.theme.colours.border.customCard} 8px;
   list-style: none;
   margin: 0 -20px;
   padding: 8px 12px;

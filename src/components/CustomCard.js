@@ -7,7 +7,7 @@ const Ideas = styled.p`
 `;
 
 const ListItem = styled.li`
-  margin-bottom: 32px;
+  margin-bottom: 20px;
 
   &:last-child {
     margin-bottom: 0;
@@ -16,12 +16,12 @@ const ListItem = styled.li`
 
 const Paper = styled.p`
   margin: 0;
-  ${(props) => (props.ideas ? 'margin-bottom: 8px;' : '')}
+  ${(props) => (props.hasIdeas ? 'margin-bottom: 4px;' : '')}
 `;
 
 const CustomCard = ({ item }) => (
   <ListItem key={`${item.type}-${item.paper}-${item.ideas}`}>
-    <Paper>{item.paper}</Paper>
+    <Paper hasIdeas={item.ideas}>{item.paper}</Paper>
     {item.ideas && <Ideas>{item.ideas}</Ideas>}
   </ListItem>
 );
