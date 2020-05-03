@@ -10,7 +10,7 @@ const getOrders = async (token) => {
   const json = await response.json();
   if (!response.ok) throw json;
   const orders = {};
-  json.forEach(order => {
+  json.forEach((order) => {
     orders[order.id] = order;
   });
   return orders;
