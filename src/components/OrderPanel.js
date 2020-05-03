@@ -14,6 +14,10 @@ const OrderList = styled.ul`
   padding: 0;
 `;
 
+const Panel = styled.article`
+  max-width: 400px;
+`;
+
 const Title = styled.h2`
   font-size: 1.3rem;
   font-weight: 400;
@@ -42,7 +46,7 @@ const OrderPanel = () => {
     );
 
   return (
-    <article>
+    <Panel>
       <header>
         <Title>Orders</Title>
       </header>
@@ -56,7 +60,7 @@ const OrderPanel = () => {
           />
         ))}
       </OrderList>
-    </article>
+    </Panel>
   );
 };
 
