@@ -8,7 +8,7 @@ import { selectors as authSelectors } from 'state/auth';
 
 const initialState = {
   isFetchingOrders: false,
-  orders: [],
+  orders: {},
 };
 
 const slice = createSlice({
