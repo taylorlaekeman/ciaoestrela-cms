@@ -45,13 +45,17 @@ const OrderPanel = () => {
       </article>
     );
 
+  const sortedOrders = Object.values(orders).sort(
+    (first, second) => first.modifiedDate <= second.modifiedDate
+  );
+
   return (
     <Panel>
       <header>
         <Title>Orders</Title>
       </header>
       <OrderList>
-        {Object.values(orders).map((order) => (
+        {sortedOrders.map((order) => (
           <Order
             isSelected={order.id === selectedOrder}
             key={order.id}
