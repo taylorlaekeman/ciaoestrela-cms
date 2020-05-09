@@ -1,11 +1,14 @@
 import { useOktaAuth } from '@okta/okta-react';
 import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { useLocation } from 'react-router-dom';
+import { Route, Switch, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 
 import Header from 'components/Header';
+import Home from 'components/Home';
+import Listings from 'components/Listings';
 import OrderPanel from 'components/OrderPanel';
+import PinCreator from 'components/PinCreator';
 import { actions as authActions } from 'state/auth';
 
 const Wrapper = styled.div`
@@ -15,6 +18,11 @@ const Wrapper = styled.div`
   min-height: 100vh;
   padding-bottom: 10px;
   width: 100vw;
+`;
+
+const Main = styled.main`
+  padding: 8px;
+  padding-top: 32px;
 `;
 
 const CiaoestrelaCms = () => {
@@ -38,10 +46,22 @@ const CiaoestrelaCms = () => {
   return (
     <Wrapper>
       <Header />
-      <button type="button" onClick={() => authService.logout()}>
-        logout
-      </button>
-      <OrderPanel />
+      <Main>
+        <Switch>
+          <Route path="/orders">
+            <OrderPanel />
+          </Route>
+          <Route exact path="/listings">
+            <Listings />
+          </Route>
+          <Route path="/listings/pins/new">
+            <PinCreator />
+          </Route>
+          <Route path="/">
+            <Home />
+          </Route>
+        </Switch>
+      </Main>
     </Wrapper>
   );
 };

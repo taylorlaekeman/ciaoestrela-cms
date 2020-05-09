@@ -37,15 +37,22 @@ const palette = {
 const colours = {
   background: {
     customCard: palette.primary[100],
+    header: palette.neutral[100],
     order: palette.neutral[100],
     page: palette.neutral[200],
+    panel: palette.neutral[100],
+    primaryButton: palette.neutral[200],
   },
   border: {
     customCard: palette.primary[100],
+    normal: palette.neutral[400],
+    primaryButton: palette.neutral[200],
   },
   shadow: palette.neutral[900],
   text: {
-    customCard: palette.primary[600],
+    body: palette.neutral[900],
+    customCard: palette.primary[900],
+    label: palette.neutral[700],
   },
 };
 
