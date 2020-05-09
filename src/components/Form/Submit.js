@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 const addProps = () => ({ type: 'submit' });
 
-const Submit = styled.input.attrs(addProps)`
+const Submit = styled.button.attrs(addProps)`
   background-color: ${(props) => props.theme.colours.background.primaryButton};
   border: solid ${(props) => props.theme.colours.border.primaryButton} 1px;
   border-radius: 4px;

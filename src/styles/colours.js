@@ -48,6 +48,9 @@ const colours = {
     normal: palette.neutral[400],
     primaryButton: palette.neutral[200],
   },
+  icon: {
+    normal: palette.neutral[900],
+  },
   shadow: palette.neutral[900],
   text: {
     body: palette.neutral[900],

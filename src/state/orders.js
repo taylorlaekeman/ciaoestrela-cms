@@ -36,7 +36,7 @@ export const epics = {
         const token = authSelectors.selectToken(state);
         return from(api.getOrders(token)).pipe(
           map((orders) => actions.fetchOrdersSuccess(orders)),
-          catchError((error) => of(actions.fetchOrdersFailure(error)))
+          catchError((error) => of(actions.fetchOrdersFailure(error))),
         );
       })
     ),
