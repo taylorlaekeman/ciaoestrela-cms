@@ -1,6 +1,6 @@
 import settings from 'settings';
 
-const buildSettings = (token, method='GET', body={}) => ({
+const buildSettings = (token, method = 'GET', body = {}) => ({
   body: JSON.stringify(body),
   headers: {
     Authorization: `Bearer ${token}`,

@@ -29,7 +29,9 @@ const Header = () => {
   const { authService } = useOktaAuth();
   return (
     <Container>
-      <Link to="/"><Title>Ciao, Estrela Co.</Title></Link>
+      <Link to="/">
+        <Title>Ciao, Estrela Co.</Title>
+      </Link>
       <Description>Admin panel</Description>
       <button type="button" onClick={() => authService.logout()}>
         logout

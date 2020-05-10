@@ -18,7 +18,7 @@ const store = configureStore({
 
 const epics = combineEpics(
   ...Object.values(orderEpics),
-  ...Object.values(pinEpics),
+  ...Object.values(pinEpics)
 );
 epicMiddleware.run(epics);
 

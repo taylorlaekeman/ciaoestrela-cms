@@ -38,11 +38,15 @@ const Title = styled.h2`
 
 const Listings = () => (
   <Panel>
-    <Header><Title>Pins</Title></Header>
+    <Header>
+      <Title>Pins</Title>
+    </Header>
     <Pins>
       <Pin>test</Pin>
     </Pins>
-    <Footer><Link to="/listings/pins/new">Add pin</Link></Footer>
+    <Footer>
+      <Link to="/listings/pins/new">Add pin</Link>
+    </Footer>
   </Panel>
 );
 

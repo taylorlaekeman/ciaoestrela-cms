@@ -15,9 +15,17 @@ const slice = createSlice({
   initialState,
   name: 'pins',
   reducers: {
-    createPin: (state, action) => ({ ...state, isCreatingPin: true }),
-    createPinFailure: (state, action) => ({ ...state, createPinErrors: action.payload, isCreatingPin: false }),
-    createPinSuccess: (state) => ({ ...state, createPinErrors: null, isCreatingPin: false }),
+    createPin: (state) => ({ ...state, isCreatingPin: true }),
+    createPinFailure: (state, action) => ({
+      ...state,
+      createPinErrors: action.payload,
+      isCreatingPin: false,
+    }),
+    createPinSuccess: (state) => ({
+      ...state,
+      createPinErrors: null,
+      isCreatingPin: false,
+    }),
   },
 });
 
@@ -29,10 +37,12 @@ export const epics = {
       ofType(actions.createPin),
       mergeMap((action) => {
         const token = authSelectors.selectToken(state$.value);
-        const { payload: { cost, name } } = action;
+        const {
+          payload: { cost, name },
+        } = action;
         return from(api.createPin(token, name, cost)).pipe(
           map((pin) => actions.createPinSuccess(pin)),
-          catchError((error) => of(actions.createPinFailure(error))),
+          catchError((error) => of(actions.createPinFailure(error)))
         );
       })
     ),

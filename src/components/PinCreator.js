@@ -25,7 +25,8 @@ const Cog = styled(UnstyledCog)`
 `;
 
 const getCostError = (cost) => {
-  if (!cost || parseInt(cost) <= 0) return 'Cost is required and must be a number greater than zero';
+  if (!cost || parseInt(cost, 10) <= 0)
+    return 'Cost is required and must be a number greater than zero';
   return null;
 };
 
@@ -57,35 +58,31 @@ const PinCreator = () => {
     setIsCostDirty(true);
   };
 
-  const updateCost = (cost) => {
-    setCost(cost);
-    setIsCostDirty(true);
-  };
-
-  const updateName = (name) => {
-    setName(name);
-    setIsNameDirty(true);
-  };
-
   return (
     <>
       <Link to="/listings">Back to listings</Link>
       <Panel>
         <Form onSubmit={submitForm}>
           <Input
-            area={'name'}
+            area="name"
             error={isNameDirty && getNameError(name)}
             name="Name"
             onBlur={() => setIsNameDirty(true)}
-            onChange={updateName}
+            onChange={(newName) => {
+              setName(newName);
+              setIsNameDirty(true);
+            }}
             value={name}
           />
           <Input
-            area={'cost'}
+            area="cost"
             error={isCostDirty && getCostError(cost)}
             name="Cost"
             onBlur={() => setIsCostDirty(true)}
-            onChange={updateCost}
+            onChange={(newCost) => {
+              setCost(newCost);
+              setIsCostDirty(true);
+            }}
             type="number"
             value={cost}
           />
