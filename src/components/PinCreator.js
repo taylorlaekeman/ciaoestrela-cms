@@ -8,21 +8,9 @@ import Error from 'components/Form/Error';
 import UnstyledInput from 'components/Form/Input';
 import Submit from 'components/Form/Submit';
 import UnstyledLink from 'components/Link';
+import LoadingIndicator from 'components/LoadingIndicator';
 import Panel from 'components/Panel';
 import { actions as pinActions, selectors as pinSelectors } from 'state/pins';
-
-const Cog = styled(UnstyledCog)`
-  animation: spin 1s linear infinite;
-  fill: ${(props) => props.theme.colours.icon.normal};
-  height: 16px;
-  width: 16px;
-
-  @keyframes spin {
-    100% {
-      transform: rotate(360deg);
-    }
-  }
-`;
 
 const getCostError = (cost) => {
   if (!cost || parseInt(cost, 10) <= 0)
@@ -87,7 +75,7 @@ const PinCreator = () => {
             value={cost}
           />
           <Submit area="submit" disabled={isCreatingPin}>
-            {isCreatingPin ? <Cog /> : 'Create pin'}
+            {isCreatingPin ? <LoadingIndicator /> : 'Create pin'}
           </Submit>
           {createPinErrors && <Error>Could not create pin</Error>}
         </Form>
