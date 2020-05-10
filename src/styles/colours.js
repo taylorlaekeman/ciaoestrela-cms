@@ -45,6 +45,7 @@ const colours = {
   },
   border: {
     customCard: palette.primary[100],
+    error: palette.error[400],
     normal: palette.neutral[400],
     primaryButton: palette.neutral[200],
   },
@@ -55,6 +56,7 @@ const colours = {
   text: {
     body: palette.neutral[900],
     customCard: palette.primary[900],
+    error: palette.error[900],
     label: palette.neutral[700],
   },
 };

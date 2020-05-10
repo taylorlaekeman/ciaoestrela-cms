@@ -1,37 +1,46 @@
 import React from 'react';
 import styled from 'styled-components';
 
+import Error from './Error';
+
 const Label = styled.label`
-  color: ${(props) => props.theme.colours.text.label};
+  color: ${(props) => props.error ? props.theme.colours.text.error : props.theme.colours.text.label};
+  display: inline-block;
   font-size: 0.9rem;
-  grid-area: ${(props) => props.area};
   margin-bottom: 4px;
 `;
 
 const StyledInput = styled.input`
-  border: solid ${(props) => props.theme.colours.border.normal} 1px;
+  border: solid ${(props) => props.error ? props.theme.colours.border.error : props.theme.colours.border.normal} 1px;
   border-radius: 4px;
-  color: ${(props) => props.theme.colours.text.body};
+  box-sizing: border-box;
+  color: ${(props) => props.error ? props.theme.colours.text.error : props.theme.colours.text.body};
   font-size: 1rem;
-  grid-area: ${(props) => props.area};
   padding: 8px 16px;
+  width: 100%;
 `;
 
-const Input = ({ areas, name, onChange, type, value }) => (
-  <>
-    <Label area={areas[0]} htmlFor={name}>{name}</Label>
+const Wrapper = styled.section`
+  grid-area: ${(props) => props.area};
+`;
+
+const Input = ({ area, className, error, name, onBlur, onChange, type, value }) => (
+  <Wrapper area={area} className={className}>
+    <Label error={error} htmlFor={name}>{name}</Label>
     <StyledInput
-      area={areas[1]}
+      error={error}
       id={name}
+      onBlur={onBlur}
       onChange={(event) => onChange(event.target.value)}
       type={type}
       value={value}
     />
-  </>
+    {error && <Error htmlFor={error}>{error}</Error>}
+  </Wrapper>
 );
 
 Input.defaultProps = {
-  areas: [],
+  area: '',
   type: 'text',
 };
 
