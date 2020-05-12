@@ -38,9 +38,9 @@ export const epics = {
       mergeMap((action) => {
         const token = authSelectors.selectToken(state$.value);
         const {
-          payload: { cost, name },
+          payload: { cost, image, name },
         } = action;
-        return from(api.createPin(token, name, cost)).pipe(
+        return from(api.createPin(token, name, cost, image)).pipe(
           map((pin) => actions.createPinSuccess(pin)),
           catchError((error) => of(actions.createPinFailure(error)))
         );

@@ -58,7 +58,7 @@ const Input = ({
       type={type}
       value={value}
     />
-    {error && <Error htmlFor={error}>{error}</Error>}
+    {error && <Error htmlFor={name}>{error}</Error>}
   </Wrapper>
 );
 

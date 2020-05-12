@@ -36,24 +36,28 @@ const palette = {
 
 const colours = {
   background: {
+    buttonPrimary: palette.primary[100],
+    buttonSecondary: palette.neutral[200],
     customCard: palette.primary[100],
     header: palette.neutral[100],
     order: palette.neutral[100],
     page: palette.neutral[200],
     panel: palette.neutral[100],
-    primaryButton: palette.neutral[200],
   },
   border: {
+    buttonPrimary: palette.neutral[200],
+    buttonSecondary: palette.neutral[200],
     customCard: palette.primary[100],
     error: palette.error[400],
     normal: palette.neutral[400],
-    primaryButton: palette.neutral[200],
   },
   icon: {
     normal: palette.neutral[900],
   },
   shadow: palette.neutral[900],
   text: {
+    buttonPrimary: palette.primary[900],
+    buttonSecondary: palette.neutral[900],
     body: palette.neutral[900],
     customCard: palette.primary[900],
     error: palette.error[900],
