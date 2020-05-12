@@ -1,13 +1,16 @@
 import settings from 'settings';
 
-const buildSettings = (token, method = 'GET', body = {}) => ({
-  body: JSON.stringify(body),
-  headers: {
-    Authorization: `Bearer ${token}`,
-    'Content-Type': 'application/json',
-  },
-  method,
-});
+const buildSettings = (token, method = 'GET', body = {}) => {
+  const requestSettings = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+    method,
+  };
+  if (method === 'POST') settings.body = JSON.stringify(body);
+  return requestSettings;
+};
 
 const createPin = async (token, name, cost) => {
   const url = `${settings.apiUrl}/pins/`;
@@ -17,15 +20,26 @@ const createPin = async (token, name, cost) => {
   return response;
 };
 
+const getItemsById = (items) => {
+  const itemsById = {};
+  items.forEach((item) => {
+    itemsById[item.id] = item;
+  });
+  return itemsById;
+};
+
 const getOrders = async (token) => {
   const url = `${settings.apiUrl}/orders/`;
   const requestSettings = buildSettings(token);
-  const response = await makeRequest(url, requestSettings);
-  const orders = {};
-  response.forEach((order) => {
-    orders[order.id] = order;
-  });
-  return orders;
+  const orders = await makeRequest(url, requestSettings);
+  return getItemsById(orders);
+};
+
+const getPins = async (token) => {
+  const url = `${settings.apiUrl}/pins/`;
+  const requestSettings = buildSettings(token);
+  const pins = await makeRequest(url, requestSettings);
+  return getItemsById(pins);
 };
 
 const makeRequest = async (url, requestSettings) => {
@@ -38,4 +52,5 @@ const makeRequest = async (url, requestSettings) => {
 export default {
   createPin,
   getOrders,
+  getPins,
 };

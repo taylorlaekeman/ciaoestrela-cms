@@ -8,7 +8,10 @@ import { selectors as authSelectors } from 'state/auth';
 
 const initialState = {
   createPinErrors: null,
+  fetchPinsErrors: null,
   isCreatingPin: false,
+  isFetchingPins: false,
+  pins: {},
 };
 
 const slice = createSlice({
@@ -25,6 +28,18 @@ const slice = createSlice({
       ...state,
       createPinErrors: null,
       isCreatingPin: false,
+    }),
+    fetchPins: (state) => ({ ...state, isFetchingPins: true }),
+    fetchPinsFailure: (state, action) => ({
+      ...state,
+      fetchPinsErrors: action.payload,
+      isFetchingPins: false,
+    }),
+    fetchPinsSuccess: (state, action) => ({
+      ...state,
+      fetchPinsErrors: null,
+      isFetchingPins: false,
+      pins: action.payload,
     }),
   },
 });
@@ -46,11 +61,26 @@ export const epics = {
         );
       })
     ),
+
+  fetchPins: (action$, state$) =>
+    action$.pipe(
+      ofType(actions.fetchPins),
+      mergeMap(() => {
+        const token = authSelectors.selectToken(state$.value);
+        return from(api.getPins(token)).pipe(
+          map((pins) => actions.fetchPinsSuccess(pins)),
+          catchError((error) => of(actions.fetchPinsFailure(error)))
+        );
+      })
+    ),
 };
 
 export const selectors = {
   isCreatingPin: (state) => state.pins.isCreatingPin,
+  isFetchingPins: (state) => state.pins.isFetchingPins,
   selectCreatePinErrors: (state) => state.pins.createPinErrors,
+  selectFetchPinsErrors: (state) => state.pins.fetchPinsErrors,
+  selectPins: (state) => state.pins.pins,
 };
 
 export default slice.reducer;
