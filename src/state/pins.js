@@ -41,6 +41,21 @@ const slice = createSlice({
       isFetchingPins: false,
       pins: action.payload,
     }),
+    setStatus: (state) => state,
+    setStatusFailure: (state) => state,
+    setStatusSuccess: (state, action) => {
+      const { id, isAvailable } = action.payload;
+      return {
+        ...state,
+        pins: {
+          ...state.pins,
+          [id]: {
+            ...state.pins[id],
+            isAvailable,
+          },
+        },
+      };
+    },
   },
 });
 
@@ -70,6 +85,19 @@ export const epics = {
         return from(api.getPins(token)).pipe(
           map((pins) => actions.fetchPinsSuccess(pins)),
           catchError((error) => of(actions.fetchPinsFailure(error)))
+        );
+      })
+    ),
+
+  setStatus: (action$, state$) =>
+    action$.pipe(
+      ofType(actions.setStatus),
+      mergeMap((action) => {
+        const { id, status } = action.payload;
+        const token = authSelectors.selectToken(state$.value);
+        return from(api.setPinStatus(token, id, status)).pipe(
+          map((pin) => actions.setStatusSuccess(pin)),
+          catchError((error) => of(actions.setStatusFailure(error)))
         );
       })
     ),

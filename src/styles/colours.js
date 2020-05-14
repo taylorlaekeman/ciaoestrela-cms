@@ -1,14 +1,14 @@
 const palette = {
   error: {
-    100: 'red',
-    200: 'red',
-    300: 'red',
-    400: 'red',
-    500: 'red',
-    600: 'red',
-    700: 'red',
-    800: 'red',
-    900: 'red',
+    100: 'hsl(0, 95%, 95%)',
+    200: 'hsl(0, 90%, 87%)',
+    300: 'hsl(0, 90%, 78%)',
+    400: 'hsl(0, 90%, 72%)',
+    500: 'hsl(0, 90%, 65%)',
+    600: 'hsl(0, 65%, 49%)',
+    700: 'hsl(0, 70%, 35%)',
+    800: 'hsl(0, 50%, 28%)',
+    900: 'hsl(0, 50%, 15%)',
   },
   neutral: {
     100: 'white',
@@ -43,6 +43,10 @@ const colours = {
     order: palette.neutral[100],
     page: palette.neutral[200],
     panel: palette.neutral[100],
+    pin: {
+      active: palette.primary[100],
+      disabled: palette.error[100],
+    },
   },
   border: {
     buttonPrimary: palette.neutral[200],
@@ -50,6 +54,9 @@ const colours = {
     customCard: palette.primary[100],
     error: palette.error[400],
     normal: palette.neutral[400],
+    pin: {
+      hover: palette.primary[500],
+    },
   },
   icon: {
     normal: palette.neutral[900],
@@ -62,6 +69,11 @@ const colours = {
     customCard: palette.primary[900],
     error: palette.error[900],
     label: palette.neutral[700],
+    pin: {
+      active: palette.primary[900],
+      disabled: palette.error[800],
+    },
+    subtitle: palette.neutral[800],
   },
 };
 

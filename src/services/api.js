@@ -8,7 +8,7 @@ const buildSettings = (token, method = 'GET', body = {}) => {
     },
     method,
   };
-  if (method === 'POST') settings.body = JSON.stringify(body);
+  if (method !== 'GET') requestSettings.body = JSON.stringify(body);
   return requestSettings;
 };
 
@@ -49,8 +49,16 @@ const makeRequest = async (url, requestSettings) => {
   return json;
 };
 
+const setPinStatus = async (token, pinId, isAvailable) => {
+  const url = `${settings.apiUrl}/pins/${pinId}/`;
+  const body = { isAvailable };
+  const requestSettings = buildSettings(token, 'PATCH', body);
+  return makeRequest(url, requestSettings);
+};
+
 export default {
   createPin,
   getOrders,
   getPins,
+  setPinStatus,
 };
