@@ -32,7 +32,7 @@ const PinList = ({ pins }) => {
 };
 
 PinList.propTypes = {
-  pins: PropTypes.arrayOfType(
+  pins: PropTypes.arrayOf(
     PropTypes.shape({
       cost: PropTypes.string.isRequired,
       id: PropTypes.number.isRequired,
