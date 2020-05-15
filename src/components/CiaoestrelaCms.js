@@ -11,18 +11,17 @@ import OrderPanel from 'components/OrderPanel';
 import PinCreator from 'components/PinCreator';
 import { actions as authActions } from 'state/auth';
 
+const Main = styled.main`
+  overflow: hidden;
+`;
+
 const Wrapper = styled.div`
   background-color: ${(props) => props.theme.colours.background.page};
   box-sizing: border-box;
-  height: 100%;
-  min-height: 100vh;
-  padding-bottom: 10px;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  height: 100vh;
   width: 100vw;
-`;
-
-const Main = styled.main`
-  padding: 8px;
-  padding-top: 32px;
 `;
 
 const CiaoestrelaCms = () => {

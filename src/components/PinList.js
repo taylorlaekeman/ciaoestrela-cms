@@ -16,9 +16,9 @@ const LoadingWrapper = styled.div`
 
 const Pins = styled.ul`
   list-style: none;
-  max-height: 300px;
+  margin: 0;
   overflow: scroll;
-  padding: 0;
+  padding: 0 16px;
 `;
 
 const PinList = ({ pins }) => {

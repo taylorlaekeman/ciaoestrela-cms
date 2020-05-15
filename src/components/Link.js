@@ -1,3 +1,4 @@
+import React from 'react';
 import { Link as UnstyledLink } from 'react-router-dom';
 import styled, { css } from 'styled-components';
 
@@ -12,7 +13,11 @@ const linkStyles = css`
   width: 100%;
 `;
 
-const Link = styled(UnstyledLink)`
+const Link = styled(({ className, children, to }) => (
+  <UnstyledLink className={className} to={to}>
+    {children}
+  </UnstyledLink>
+))`
   ${(props) => (props.button ? buttonStyles : linkStyles)}
   grid-area: ${(props) => props.area};
   text-decoration: none;

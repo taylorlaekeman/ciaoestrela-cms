@@ -9,19 +9,23 @@ import { actions as pinActions, selectors as pinSelectors } from 'state/pins';
 
 const Footer = styled.footer`
   background-color: ${({ theme }) => theme.colours.background.footer};
-  margin-top: 32px;
-  margin: -8px;
-  padding: 8px;
+  padding: 16px;
 `;
 
 const Header = styled.header`
-  margin-bottom: 32px;
+  padding 32px;
 `;
 
 const Title = styled.h2`
   font-size: 1.4rem;
   font-weight: 400;
   margin: 0;
+`;
+
+const Wrapper = styled.article`
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  height: 100%;
 `;
 
 const Listings = () => {
@@ -34,7 +38,7 @@ const Listings = () => {
   }, [dispatch, token]);
 
   return (
-    <>
+    <Wrapper>
       <Header>
         <Title>Pins</Title>
       </Header>
@@ -44,7 +48,7 @@ const Listings = () => {
           Create pin
         </Link>
       </Footer>
-    </>
+    </Wrapper>
   );
 };
 

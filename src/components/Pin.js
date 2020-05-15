@@ -42,12 +42,12 @@ const Wrapper = styled.li`
         : theme.colours.border.pin.disabled}
     8px;
   display: grid;
-  justify-content: space-between;
   grid-gap: 4px 16px;
   grid-template-areas:
     'cost  . edit toggle'
     'title . edit toggle';
   grid-template-columns: auto 1fr max-content auto;
+  justify-content: space-between;
   margin-bottom: 16px;
 `;
 
