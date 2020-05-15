@@ -2,12 +2,17 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 
+import LoadingIndicator from 'components/LoadingIndicator';
 import Order from 'components/Order';
 import { selectors as authSelectors } from 'state/auth';
 import {
   actions as orderActions,
   selectors as orderSelectors,
 } from 'state/orders';
+
+const Header = styled.header`
+  padding: 32px;
+`;
 
 const OrderList = styled.ul`
   list-style: none;
@@ -21,7 +26,11 @@ const Panel = styled.article`
 const Title = styled.h2`
   font-size: 1.3rem;
   font-weight: 400;
-  margin: 0 20px 10px 20px;
+  margin: 0;
+`;
+
+const Wrapper = styled.article`
+  height: 100%;
 `;
 
 const OrderPanel = () => {
@@ -37,12 +46,12 @@ const OrderPanel = () => {
 
   if (isFetchingOrders)
     return (
-      <article>
-        <header>
+      <Wrapper>
+        <Header>
           <Title>Orders</Title>
-        </header>
-        <p>loading...</p>
-      </article>
+        </Header>
+        <LoadingIndicator centered large />
+      </Wrapper>
     );
 
   const sortedOrders = Object.values(orders).sort(
@@ -51,9 +60,9 @@ const OrderPanel = () => {
 
   return (
     <Panel>
-      <header>
+      <Header>
         <Title>Orders</Title>
-      </header>
+      </Header>
       <OrderList>
         {sortedOrders.map((order) => (
           <Order
