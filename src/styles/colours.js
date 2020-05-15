@@ -79,7 +79,7 @@ const colours = {
     customCard: palette.primary[900],
     error: palette.error[500],
     label: palette.neutral[700],
-    subtitle: palette.neutral[700],
+    subtitle: palette.neutral[600],
   },
 };
 

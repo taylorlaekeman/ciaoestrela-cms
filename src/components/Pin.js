@@ -46,7 +46,7 @@ const Wrapper = styled.li`
   grid-template-areas:
     'cost  . edit toggle'
     'title . edit toggle';
-  grid-template-columns: auto 1fr max-content auto;
+  grid-template-columns: auto 1fr auto auto;
   justify-content: space-between;
   margin-bottom: 16px;
 `;
