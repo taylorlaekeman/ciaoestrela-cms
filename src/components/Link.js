@@ -1,11 +1,21 @@
 import { Link as UnstyledLink } from 'react-router-dom';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
-const Link = styled(UnstyledLink)`
+const buttonStyles = css`
+  ${(props) => props.theme.components.button.primary}
+  padding: 16px;
+`;
+
+const linkStyles = css`
   display: inline-block;
   color: ${(props) => props.theme.colours.text.body};
-  text-decoration: none;
   width: 100%;
+`;
+
+const Link = styled(UnstyledLink)`
+  ${(props) => (props.button ? buttonStyles : linkStyles)}
+  grid-area: ${(props) => props.area};
+  text-decoration: none;
 `;
 
 export default Link;

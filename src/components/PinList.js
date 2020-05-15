@@ -7,9 +7,15 @@ import LoadingIndicator from 'components/LoadingIndicator';
 import Pin from 'components/Pin';
 import { selectors as pinSelectors } from 'state/pins';
 
+const LoadingWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  padding: 64px;
+  width: 100%;
+`;
+
 const Pins = styled.ul`
   list-style: none;
-  margin: 0 -32px;
   max-height: 300px;
   overflow: scroll;
   padding: 0;
@@ -18,7 +24,12 @@ const Pins = styled.ul`
 const PinList = ({ pins }) => {
   const isFetchingPins = useSelector(pinSelectors.isFetchingPins);
 
-  if (isFetchingPins) return <LoadingIndicator large="true" />;
+  if (isFetchingPins)
+    return (
+      <LoadingWrapper>
+        <LoadingIndicator large="true" />
+      </LoadingWrapper>
+    );
 
   if (pins.length === 0) return 'Create a pin to get started';
 

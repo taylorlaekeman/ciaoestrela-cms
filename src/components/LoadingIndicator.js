@@ -4,7 +4,7 @@ import { ReactComponent as Cog } from 'assets/icons/cog.svg';
 
 const LoadingIndicator = styled(Cog)`
   animation: spin ${(props) => (props.large ? '2s' : '1s')} linear infinite;
-  fill: ${(props) => props.theme.colours.icon.normal};
+  fill: ${(props) => props.theme.colours.fill.icon};
   height: ${(props) => (props.large ? '32px' : '16px')};
   width: ${(props) => (props.large ? '32px' : '16px')};
 

@@ -3,51 +3,25 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 
+import { ReactComponent as UnstyledEditIcon } from 'assets/icons/edit-pencil.svg';
+import Link from 'components/Link';
+import Form from 'components/Form';
+import Toggle from 'components/Form/Toggle';
 import { actions as pinActions } from 'state/pins';
-
-const Button = styled.button`
-  align-content: baseline;
-  appearance: none;
-  background: none;
-  border: none;
-  display: grid;
-  justify-content: space-between;
-  grid-auto-columns: max-content;
-  grid-gap: 8px;
-  grid-template-areas:
-    'title status'
-    'cost  status';
-  padding: 0;
-  text-align: left;
-  width: 100%;
-`;
 
 const Cost = styled.p`
   color: ${(props) => props.theme.colours.text.subtitle};
-  font-size: 0.8rem;
+  font-size: 0.6rem;
+  font-weight: 500;
   grid-area: cost;
+  letter-spacing: 0.1em;
   margin: 0;
 `;
 
-const Status = styled.p`
-  background-color: ${(props) =>
-    props.isAvailable
-      ? props.theme.colours.background.pin.active
-      : props.theme.colours.background.pin.disabled};
-  border-radius: 16px;
-  color: ${(props) =>
-    props.isAvailable
-      ? props.theme.colours.text.pin.active
-      : props.theme.colours.text.pin.disabled};
-  font-size: 0.5rem;
-  font-weight: 500;
-  grid-area: status;
-  height: min-content;
-  letter-spacing: 2px;
-  margin: 0;
-  padding: 8px 16px;
-  text-transform: uppercase;
-  width: max-content;
+const EditIcon = styled(UnstyledEditIcon)`
+  fill: ${({ theme }) => theme.colours.fill.icon};
+  height: 16px;
+  width: 16px;
 `;
 
 const Title = styled.h3`
@@ -59,14 +33,22 @@ const Title = styled.h3`
 `;
 
 const Wrapper = styled.li`
-  padding: 16px 32px;
-  box-sizing: border-box;
-
-  &:hover {
-    border-left: solid ${({ theme }) => theme.colours.border.pin.hover} 4px;
-    border-right: solid ${({ theme }) => theme.colours.border.pin.hover} 4px;
-    padding: 16px 28px;
-  }
+  ${({ theme }) => theme.components.panel}
+  align-items: center;
+  border-right: solid
+    ${({ isAvailable, theme }) =>
+      isAvailable
+        ? theme.colours.border.pin.active
+        : theme.colours.border.pin.disabled}
+    8px;
+  display: grid;
+  justify-content: space-between;
+  grid-gap: 4px 16px;
+  grid-template-areas:
+    'cost  . edit toggle'
+    'title . edit toggle';
+  grid-template-columns: auto 1fr max-content auto;
+  margin-bottom: 16px;
 `;
 
 const Pin = ({ className, pin }) => {
@@ -81,14 +63,19 @@ const Pin = ({ className, pin }) => {
     );
 
   return (
-    <Wrapper className={className}>
-      <Button onClick={updateStatus}>
-        <Title>{pin.name}</Title>
-        <Cost>{`$${pin.cost}`}</Cost>
-        <Status isAvailable={pin.isAvailable}>
-          {pin.isAvailable ? 'active' : 'disabled'}
-        </Status>
-      </Button>
+    <Wrapper className={className} isAvailable={pin.isAvailable}>
+      <Title>{pin.name}</Title>
+      <Cost>{`$ ${pin.cost}`}</Cost>
+      <Link area="edit" to={`/listings/pins/${pin.id}`}>
+        <EditIcon />
+      </Link>
+      <Form area="toggle">
+        <Toggle
+          name={`pin-${pin.id}-status`}
+          onChange={updateStatus}
+          value={pin.isAvailable}
+        />
+      </Form>
     </Wrapper>
   );
 };
