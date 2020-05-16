@@ -1,12 +1,14 @@
 import { useOktaAuth } from '@okta/okta-react';
 import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { Route, Switch, useLocation } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import styled from 'styled-components';
 
 import Header from 'components/Header';
 import Home from 'components/Home';
 import Listings from 'components/Listings';
+import LoadingIndicator from 'components/LoadingIndicator';
+import Login from 'components/Login';
 import OrderPanel from 'components/OrderPanel';
 import PinCreator from 'components/PinCreator';
 import { actions as authActions } from 'state/auth';
@@ -25,21 +27,30 @@ const Wrapper = styled.div`
 `;
 
 const CiaoestrelaCms = () => {
-  const { authState, authService } = useOktaAuth();
+  const { authState } = useOktaAuth();
   const dispatch = useDispatch();
-  const { pathname } = useLocation();
 
   useEffect(() => {
     dispatch(authActions.saveToken(authState.accessToken));
   }, [dispatch, authState.accessToken]);
 
-  if (authState.isPending) return <div>loading...</div>;
+  if (authState.isPending)
+    return (
+      <Wrapper>
+        <Header />
+        <Main>
+          <LoadingIndicator centered large />
+        </Main>
+      </Wrapper>
+    );
 
   if (!authState.isAuthenticated)
     return (
-      <button type="button" onClick={() => authService.login(pathname)}>
-        login
-      </button>
+      <Wrapper>
+        <Main>
+          <Login />
+        </Main>
+      </Wrapper>
     );
 
   return (

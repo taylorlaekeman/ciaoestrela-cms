@@ -24,7 +24,6 @@ const Wrapper = styled.div`
   display: flex;
   height: 100%;
   justify-content: center;
-  padding-bottom: 60%;
 `;
 
 const LoadingIndicator = ({ area, centered, className, large }) => {
