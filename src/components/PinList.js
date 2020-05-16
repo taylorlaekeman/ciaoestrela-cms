@@ -7,6 +7,12 @@ import LoadingIndicator from 'components/LoadingIndicator';
 import Pin from 'components/Pin';
 import { selectors as pinSelectors } from 'state/pins';
 
+const CenteringWrapper = styled.div`
+  align-items: center;
+  display: flex;
+  justify-content: center;
+`;
+
 const Pins = styled.ul`
   list-style: none;
   margin: 0;
@@ -19,7 +25,10 @@ const PinList = ({ pins }) => {
 
   if (isFetchingPins) return <LoadingIndicator centered large />;
 
-  if (pins.length === 0) return 'Create a pin to get started';
+  if (pins.length === 0)
+    return (
+      <CenteringWrapper>Create a pin to get started</CenteringWrapper>
+    );
 
   return (
     <Pins>
