@@ -26,8 +26,4 @@ const Login = () => {
   );
 };
 
-/* <button type="button" onClick={() => authService.login(pathname)}>
-  login
-</button> */
-
 export default Login;

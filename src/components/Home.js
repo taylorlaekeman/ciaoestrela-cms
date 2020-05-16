@@ -23,12 +23,12 @@ const Links = styled.ul`
 const Home = () => (
   <Links>
     <Item>
-      <Link to="orders">
+      <Link plain to="orders">
         <Panel>Orders</Panel>
       </Link>
     </Item>
     <Item>
-      <Link to="listings">
+      <Link plain to="listings">
         <Panel>Listings</Panel>
       </Link>
     </Item>
