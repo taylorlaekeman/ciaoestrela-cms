@@ -29,7 +29,7 @@ const Header = () => {
   const { authService } = useOktaAuth();
   return (
     <Container>
-      <Link to="/">
+      <Link plain to="/">
         <Title>Ciao, Estrela Co.</Title>
       </Link>
       <Description>Admin panel</Description>
