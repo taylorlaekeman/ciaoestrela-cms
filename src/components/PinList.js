@@ -26,9 +26,7 @@ const PinList = ({ pins }) => {
   if (isFetchingPins) return <LoadingIndicator centered large />;
 
   if (pins.length === 0)
-    return (
-      <CenteringWrapper>Create a pin to get started</CenteringWrapper>
-    );
+    return <CenteringWrapper>Create a pin to get started</CenteringWrapper>;
 
   return (
     <Pins>
