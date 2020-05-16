@@ -2,6 +2,7 @@ import { useOktaAuth } from '@okta/okta-react';
 import React from 'react';
 import styled from 'styled-components';
 
+import Button from 'components/Button';
 import Link from 'components/Link';
 
 const Container = styled.header`
@@ -19,12 +20,6 @@ const Title = styled.h1`
   margin: 0;
 `;
 
-const Description = styled.p`
-  font-size: 1rem;
-  font-weight: 400;
-  margin: 0;
-`;
-
 const Header = () => {
   const { authService } = useOktaAuth();
   return (
@@ -32,10 +27,9 @@ const Header = () => {
       <Link plain to="/">
         <Title>Ciao, Estrela Co.</Title>
       </Link>
-      <Description>Admin panel</Description>
-      <button type="button" onClick={() => authService.logout()}>
-        logout
-      </button>
+      <Button onClick={() => authService.logout()} plain>
+        Logout
+      </Button>
     </Container>
   );
 };
