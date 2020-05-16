@@ -20,7 +20,7 @@ const Link = styled(({ className, children, to }) => (
 ))`
   ${(props) => (props.button ? buttonStyles : linkStyles)}
   grid-area: ${(props) => props.area};
-  ${({ button, plain }) => button || plain ? 'text-decoration: none;' : ''}
+  ${({ button, plain }) => (button || plain ? 'text-decoration: none;' : '')}
 `;
 
 export default Link;
