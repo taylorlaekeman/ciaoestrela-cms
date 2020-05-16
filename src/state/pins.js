@@ -11,6 +11,7 @@ const initialState = {
   fetchPinsErrors: null,
   isCreatingPin: false,
   isFetchingPins: false,
+  isSettingStatus: {},
   pins: {},
 };
 
@@ -41,12 +42,28 @@ const slice = createSlice({
       isFetchingPins: false,
       pins: action.payload,
     }),
-    setStatus: (state) => state,
-    setStatusFailure: (state) => state,
+    setStatus: (state, action) => ({
+      ...state,
+      isSettingStatus: {
+        ...state.isSettingStatus,
+        [action.payload.id]: true,
+      },
+    }),
+    setStatusFailure: (state, action) => ({
+      ...state,
+      isSettingStatus: {
+        ...state.isSettingStatus,
+        [action.payload.id]: false,
+      },
+    }),
     setStatusSuccess: (state, action) => {
       const { id, isAvailable } = action.payload;
       return {
         ...state,
+        isSettingStatus: {
+          ...state.isSettingsStatus,
+          [id]: false,
+        },
         pins: {
           ...state.pins,
           [id]: {
@@ -97,7 +114,7 @@ export const epics = {
         const token = authSelectors.selectToken(state$.value);
         return from(api.setPinStatus(token, id, status)).pipe(
           map((pin) => actions.setStatusSuccess(pin)),
-          catchError((error) => of(actions.setStatusFailure(error)))
+          catchError((error) => of(actions.setStatusFailure({ error, id })))
         );
       })
     ),
@@ -106,6 +123,8 @@ export const epics = {
 export const selectors = {
   isCreatingPin: (state) => state.pins.isCreatingPin,
   isFetchingPins: (state) => state.pins.isFetchingPins,
+  isSettingStatus: (pinId) => (state) =>
+    state.pins.isSettingStatus[pinId] || false,
   selectCreatePinErrors: (state) => state.pins.createPinErrors,
   selectFetchPinsErrors: (state) => state.pins.fetchPinsErrors,
   selectPins: (state) => state.pins.pins,

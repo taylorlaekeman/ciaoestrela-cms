@@ -1,13 +1,14 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 
 import { ReactComponent as UnstyledEditIcon } from 'assets/icons/edit-pencil.svg';
-import Link from 'components/Link';
 import Form from 'components/Form';
 import Toggle from 'components/Form/Toggle';
-import { actions as pinActions } from 'state/pins';
+import Link from 'components/Link';
+import LoadingIndicator from 'components/LoadingIndicator';
+import { actions as pinActions, selectors as pinSelectors } from 'state/pins';
 
 const Cost = styled.p`
   color: ${(props) => props.theme.colours.text.subtitle};
@@ -53,7 +54,7 @@ const Wrapper = styled.li`
 
 const Pin = ({ className, pin }) => {
   const dispatch = useDispatch();
-
+  const isSettingStatus = useSelector(pinSelectors.isSettingStatus(pin.id));
   const updateStatus = () =>
     dispatch(
       pinActions.setStatus({
@@ -66,9 +67,13 @@ const Pin = ({ className, pin }) => {
     <Wrapper className={className} isAvailable={pin.isAvailable}>
       <Title>{pin.name}</Title>
       <Cost>{`$ ${pin.cost}`}</Cost>
-      <Link area="edit" to={`/listings/pins/${pin.id}`}>
-        <EditIcon />
-      </Link>
+      {isSettingStatus ? (
+        <LoadingIndicator area="edit" />
+      ) : (
+        <Link area="edit" to={`/listings/pins/${pin.id}`}>
+          <EditIcon />
+        </Link>
+      )}
       <Form area="toggle">
         <Toggle
           name={`pin-${pin.id}-status`}
