@@ -47,7 +47,7 @@ const Wrapper = styled.article`
   height: 100%;
 `;
 
-const PinCreator = () => {
+const PinDetails = () => {
   const [cost, setCost] = useState('');
   const createPinErrors = useSelector(pinSelectors.selectCreatePinErrors);
   const dispatch = useDispatch();
@@ -112,4 +112,4 @@ const PinCreator = () => {
   );
 };
 
-export default PinCreator;
+export default PinDetails;
