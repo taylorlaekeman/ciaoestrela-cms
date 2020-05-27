@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useRouteMatch } from 'react-router-dom';
+import { Redirect, useRouteMatch } from 'react-router-dom';
 import styled from 'styled-components';
 
 import UnstyledForm from 'components/Form';
@@ -64,6 +64,7 @@ const PinDetails = () => {
   const {
     params: { id: pinId },
   } = useRouteMatch();
+  const [hasSubmittedForm, setHasSubmittedForm] = useState(false);
 
   const isUpdate = pinId !== 'new';
   const pin = useSelector(pinSelectors.selectPin(pinId));
@@ -75,8 +76,10 @@ const PinDetails = () => {
       !getNameError(name) &&
       !getCostError(cost) &&
       !getImageError(imageUrl, isUploadingImage)
-    )
+    ) {
       dispatch(pinActions.createPin({ cost, imageUrl, name }));
+      setHasSubmittedForm(true);
+    }
     setIsNameDirty(true);
     setIsCostDirty(true);
     setIsImageDirty(true);
@@ -88,6 +91,9 @@ const PinDetails = () => {
       setCost(pin.cost);
     }
   }, [hasLoaded, pin]);
+
+  if (!isCreatingPin && hasSubmittedForm)
+    return <Redirect to="/listings/pins" />;
 
   return (
     <Wrapper>
