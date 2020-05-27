@@ -36,8 +36,10 @@ const palette = {
 
 const colours = {
   background: {
-    buttonPrimary: palette.primary[100],
-    buttonSecondary: palette.neutral[200],
+    button: {
+      primary: palette.primary[100],
+      secondary: palette.neutral[200],
+    },
     customCard: palette.primary[100],
     footer: palette.neutral[100],
     header: palette.neutral[100],
@@ -50,8 +52,10 @@ const colours = {
     },
   },
   border: {
-    buttonPrimary: palette.neutral[200],
-    buttonSecondary: palette.neutral[200],
+    button: {
+      primary: palette.primary[100],
+      secondary: palette.neutral[200],
+    },
     customCard: palette.primary[100],
     error: palette.error[400],
     normal: palette.neutral[400],
@@ -73,8 +77,10 @@ const colours = {
   },
   shadow: palette.neutral[500],
   text: {
-    buttonPrimary: palette.primary[900],
-    buttonSecondary: palette.neutral[900],
+    button: {
+      primary: palette.primary[900],
+      secondary: palette.neutral[900],
+    },
     body: palette.neutral[900],
     customCard: palette.primary[900],
     error: palette.error[500],

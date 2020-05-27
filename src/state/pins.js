@@ -9,9 +9,11 @@ import { selectors as authSelectors } from 'state/auth';
 const initialState = {
   createPinErrors: null,
   fetchPinsErrors: null,
+  imageUrl: null,
   isCreatingPin: false,
   isFetchingPins: false,
   isSettingStatus: {},
+  isUploadingImage: false,
   pins: {},
 };
 
@@ -73,6 +75,19 @@ const slice = createSlice({
         },
       };
     },
+    uploadImage: (state) => ({
+      ...state,
+      isUploadingImage: true,
+    }),
+    uploadImageFailure: (state) => ({
+      ...state,
+      isUploadingImage: false,
+    }),
+    uploadImageSuccess: (state, action) => ({
+      ...state,
+      imageUrl: action.payload.url,
+      isUploadingImage: false,
+    }),
   },
 });
 
@@ -85,9 +100,9 @@ export const epics = {
       mergeMap((action) => {
         const token = authSelectors.selectToken(state$.value);
         const {
-          payload: { cost, image, name },
+          payload: { cost, imageUrl, name },
         } = action;
-        return from(api.createPin(token, name, cost, image)).pipe(
+        return from(api.createPin(token, name, cost, imageUrl)).pipe(
           map((pin) => actions.createPinSuccess(pin)),
           catchError((error) => of(actions.createPinFailure(error)))
         );
@@ -118,6 +133,19 @@ export const epics = {
         );
       })
     ),
+
+  uploadImage: (action$, state$) =>
+    action$.pipe(
+      ofType(actions.uploadImage),
+      mergeMap((action) => {
+        const image = action.payload;
+        const token = authSelectors.selectToken(state$.value);
+        return from(api.uploadImage(token, image)).pipe(
+          map((imageUrl) => actions.uploadImageSuccess(imageUrl)),
+          catchError((error) => of(actions.uploadImageFailure(error)))
+        );
+      })
+    ),
 };
 
 export const selectors = {
@@ -125,9 +153,12 @@ export const selectors = {
   isFetchingPins: (state) => state.pins.isFetchingPins,
   isSettingStatus: (pinId) => (state) =>
     state.pins.isSettingStatus[pinId] || false,
+  isUploadingImage: (state) => state.pins.isUploadingImage,
   selectCreatePinErrors: (state) => state.pins.createPinErrors,
   selectFetchPinsErrors: (state) => state.pins.fetchPinsErrors,
+  selectImageUrl: (state) => state.pins.imageUrl,
   selectPins: (state) => state.pins.pins,
+  selectPin: (id) => (state) => state.pins.pins[id],
 };
 
 export default slice.reducer;

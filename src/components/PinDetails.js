@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useRouteMatch } from 'react-router-dom';
 import styled from 'styled-components';
 
 import UnstyledForm from 'components/Form';
@@ -23,8 +24,9 @@ const getCostError = (cost) => {
   return null;
 };
 
-const getImageError = (image) => {
-  return image ? null : 'An image is required';
+const getImageError = (imageUrl, isUploading) => {
+  if (isUploading) return false;
+  return imageUrl ? null : 'An image is required';
 };
 
 const getNameError = (name) => {
@@ -45,26 +47,47 @@ const Upload = styled(UnstyledUpload)`
 
 const Wrapper = styled.article`
   height: 100%;
+  overflow: scroll;
 `;
 
 const PinDetails = () => {
   const [cost, setCost] = useState('');
   const createPinErrors = useSelector(pinSelectors.selectCreatePinErrors);
   const dispatch = useDispatch();
-  const [image, setImage] = useState(null);
+  const imageUrl = useSelector(pinSelectors.selectImageUrl);
   const [isCostDirty, setIsCostDirty] = useState(false);
   const isCreatingPin = useSelector(pinSelectors.isCreatingPin);
   const [isImageDirty, setIsImageDirty] = useState(false);
   const [isNameDirty, setIsNameDirty] = useState(false);
+  const isUploadingImage = useSelector(pinSelectors.isUploadingImage);
   const [name, setName] = useState('');
+  const {
+    params: { id: pinId },
+  } = useRouteMatch();
+
+  const isUpdate = pinId !== 'new';
+  const pin = useSelector(pinSelectors.selectPin(pinId));
+
+  const hasLoaded = !!pin;
 
   const submitForm = () => {
-    if (!getNameError(name) && !getCostError(cost) && !getImageError(image))
-      dispatch(pinActions.createPin({ cost, image, name }));
+    if (
+      !getNameError(name) &&
+      !getCostError(cost) &&
+      !getImageError(imageUrl, isUploadingImage)
+    )
+      dispatch(pinActions.createPin({ cost, imageUrl, name }));
     setIsNameDirty(true);
     setIsCostDirty(true);
     setIsImageDirty(true);
   };
+
+  useEffect(() => {
+    if (hasLoaded) {
+      setName(pin.name);
+      setCost(pin.cost);
+    }
+  }, [hasLoaded, pin]);
 
   return (
     <Wrapper>
@@ -72,41 +95,54 @@ const PinDetails = () => {
         <Link to="/listings">Back to listings</Link>
       </Header>
       <Form onSubmit={submitForm}>
-        <Input
-          error={isNameDirty && getNameError(name)}
-          name="Name"
-          onBlur={() => setIsNameDirty(true)}
-          onChange={(newName) => {
-            setName(newName);
-            setIsNameDirty(true);
-          }}
-          value={name}
-        />
-        <Input
-          error={isCostDirty && getCostError(cost)}
-          name="Cost"
-          onBlur={() => setIsCostDirty(true)}
-          onChange={(newCost) => {
-            setCost(newCost);
-            setIsCostDirty(true);
-          }}
-          type="number"
-          value={cost}
-        />
-        <Upload
-          accept=".png"
-          error={isImageDirty && getImageError(image)}
-          onChange={(newImage) => {
-            setImage(newImage);
-            setIsImageDirty(true);
-          }}
-          text="Click to upload an image"
-          value={image}
-        />
-        <Submit disabled={isCreatingPin}>
-          {isCreatingPin ? <LoadingIndicator /> : 'Create pin'}
-        </Submit>
-        {createPinErrors && <Error>Could not create pin</Error>}
+        {isUpdate && !hasLoaded ? (
+          <LoadingIndicator centered large />
+        ) : (
+          <>
+            <Input
+              error={isNameDirty && getNameError(name)}
+              name="Name"
+              onBlur={() => setIsNameDirty(true)}
+              onChange={(newName) => {
+                setName(newName);
+                setIsNameDirty(true);
+              }}
+              value={name}
+            />
+            <Input
+              error={isCostDirty && getCostError(cost)}
+              name="Cost"
+              onBlur={() => setIsCostDirty(true)}
+              onChange={(newCost) => {
+                setCost(newCost);
+                setIsCostDirty(true);
+              }}
+              type="number"
+              value={cost}
+            />
+            <Upload
+              accept=".png"
+              error={isImageDirty && getImageError(imageUrl, isUploadingImage)}
+              onChange={(newImage) => {
+                dispatch(pinActions.uploadImage(newImage));
+                setIsImageDirty(true);
+              }}
+              value={imageUrl}
+            >
+              {isUploadingImage ? (
+                <LoadingIndicator />
+              ) : (
+                'Click to upload an image'
+              )}
+            </Upload>
+            {!isUpdate && (
+              <Submit disabled={isCreatingPin}>
+                {isCreatingPin ? <LoadingIndicator /> : 'Create pin'}
+              </Submit>
+            )}
+            {createPinErrors && <Error>Could not create pin</Error>}
+          </>
+        )}
       </Form>
     </Wrapper>
   );
