@@ -1,10 +1,13 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Route, Switch } from 'react-router-dom';
 import styled from 'styled-components';
 
 import Link from 'components/Link';
 import PinDetails from 'components/PinDetails';
 import PinList from 'components/PinList';
+import { selectors as authSelectors } from 'state/auth';
+import { actions as pinActions, selectors as pinSelectors } from 'state/pins';
 
 const Footer = styled.footer`
   background-color: ${({ theme }) => theme.colours.background.footer};
@@ -27,25 +30,35 @@ const Wrapper = styled.article`
   height: 100%;
 `;
 
-const Listings = () => (
-  <Switch>
-    <Route path="/listings/pins/:id">
-      <PinDetails />
-    </Route>
-    <Route path="/listings">
-      <Wrapper>
-        <Header>
-          <Title>Pins</Title>
-        </Header>
-        <PinList />
-        <Footer>
-          <Link button to="/listings/pins/new">
-            Create pin
-          </Link>
-        </Footer>
-      </Wrapper>
-    </Route>
-  </Switch>
-);
+const Listings = () => {
+  const dispatch = useDispatch();
+  const pins = useSelector(pinSelectors.selectPins);
+  const token = useSelector(authSelectors.selectToken);
+
+  useEffect(() => {
+    if (token) dispatch(pinActions.fetchPins());
+  }, [dispatch, token]);
+
+  return (
+    <Switch>
+      <Route path="/listings/pins/:id">
+        <PinDetails />
+      </Route>
+      <Route path="/listings">
+        <Wrapper>
+          <Header>
+            <Title>Pins</Title>
+          </Header>
+          <PinList pins={Object.values(pins)} />
+          <Footer>
+            <Link button to="/listings/pins/new">
+              Create pin
+            </Link>
+          </Footer>
+        </Wrapper>
+      </Route>
+    </Switch>
+  );
+};
 
 export default Listings;

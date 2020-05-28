@@ -23,8 +23,7 @@ const createPin = async (token, name, cost, imageUrl) => {
   const url = `${settings.apiUrl}/pins/`;
   const body = { cost, name, imageUrl };
   const requestSettings = buildSettings({ token, method: 'POST', body });
-  const response = await makeRequest(url, requestSettings);
-  return response;
+  return makeRequest(url, requestSettings);
 };
 
 const getItemsById = (items) => {

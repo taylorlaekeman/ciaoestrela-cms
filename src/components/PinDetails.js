@@ -133,7 +133,7 @@ const PinDetails = () => {
                 dispatch(pinActions.uploadImage(newImage));
                 setIsImageDirty(true);
               }}
-              value={imageUrl || pin.imageUrl}
+              value={imageUrl || (pin && pin.imageUrl)}
             >
               {isUploadingImage ? (
                 <LoadingIndicator />

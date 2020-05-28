@@ -27,10 +27,14 @@ const slice = createSlice({
       createPinErrors: action.payload,
       isCreatingPin: false,
     }),
-    createPinSuccess: (state) => ({
+    createPinSuccess: (state, action) => ({
       ...state,
       createPinErrors: null,
       isCreatingPin: false,
+      pins: {
+        ...state.pins,
+        [action.payload.id]: action.payload,
+      },
     }),
     fetchPins: (state) => ({ ...state, isFetchingPins: true }),
     fetchPinsFailure: (state, action) => ({
