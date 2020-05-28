@@ -27,7 +27,7 @@ const Header = () => {
       <Link plain to="/">
         <Title>Ciao, Estrela Co.</Title>
       </Link>
-      <Button onClick={() => authService.logout()} plain>
+      <Button onClick={() => authService.logout()} isPlain>
         Logout
       </Button>
     </Container>

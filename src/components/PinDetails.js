@@ -142,8 +142,8 @@ const PinDetails = () => {
               )}
             </Upload>
             {!isUpdate && (
-              <Submit disabled={isCreatingPin}>
-                {isCreatingPin ? <LoadingIndicator /> : 'Create pin'}
+              <Submit isDisabled={isCreatingPin} isLoading={isCreatingPin}>
+                Create pin
               </Submit>
             )}
             {createPinErrors && <Error>Could not create pin</Error>}
