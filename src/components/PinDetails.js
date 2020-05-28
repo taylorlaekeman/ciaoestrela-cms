@@ -133,7 +133,7 @@ const PinDetails = () => {
                 dispatch(pinActions.uploadImage(newImage));
                 setIsImageDirty(true);
               }}
-              value={imageUrl}
+              value={imageUrl || pin.imageUrl}
             >
               {isUploadingImage ? (
                 <LoadingIndicator />
@@ -141,11 +141,9 @@ const PinDetails = () => {
                 'Click to upload an image'
               )}
             </Upload>
-            {!isUpdate && (
-              <Submit isDisabled={isCreatingPin} isLoading={isCreatingPin}>
-                Create pin
-              </Submit>
-            )}
+            <Submit isDisabled={isCreatingPin} isLoading={isCreatingPin}>
+              {isUpdate ? 'Update pin' : 'Create pin'}
+            </Submit>
             {createPinErrors && <Error>Could not create pin</Error>}
           </>
         )}
