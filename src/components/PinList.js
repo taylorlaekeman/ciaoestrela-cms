@@ -1,11 +1,11 @@
-import PropTypes from 'prop-types';
-import React from 'react';
-import { useSelector } from 'react-redux';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 
 import LoadingIndicator from 'components/LoadingIndicator';
 import Pin from 'components/Pin';
-import { selectors as pinSelectors } from 'state/pins';
+import { selectors as authSelectors } from 'state/auth';
+import { actions as pinActions, selectors as pinSelectors } from 'state/pins';
 
 const CenteringWrapper = styled.div`
   align-items: center;
@@ -20,8 +20,15 @@ const Pins = styled.ul`
   padding: 0 16px;
 `;
 
-const PinList = ({ pins }) => {
+const PinList = () => {
+  const dispatch = useDispatch();
   const isFetchingPins = useSelector(pinSelectors.isFetchingPins);
+  const pins = useSelector(pinSelectors.selectPins);
+  const token = useSelector(authSelectors.selectToken);
+
+  useEffect(() => {
+    if (token) dispatch(pinActions.fetchPins());
+  }, [dispatch, token]);
 
   if (isFetchingPins) return <LoadingIndicator centered large />;
 
@@ -30,22 +37,11 @@ const PinList = ({ pins }) => {
 
   return (
     <Pins>
-      {pins.map((pin) => (
+      {Object.values(pins).map((pin) => (
         <Pin key={pin.id} pin={pin} />
       ))}
     </Pins>
   );
-};
-
-PinList.propTypes = {
-  pins: PropTypes.arrayOf(
-    PropTypes.shape({
-      cost: PropTypes.string.isRequired,
-      id: PropTypes.number.isRequired,
-      isAvailable: PropTypes.bool.isRequired,
-      name: PropTypes.string.isRequired,
-    })
-  ).isRequired,
 };
 
 export default PinList;
