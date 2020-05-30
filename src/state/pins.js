@@ -13,8 +13,10 @@ const initialState = {
   isCreatingPin: false,
   isFetchingPins: false,
   isSettingStatus: {},
+  isUpdatingPin: false,
   isUploadingImage: false,
   pins: {},
+  updatePinErrors: null,
 };
 
 const slice = createSlice({
@@ -79,6 +81,23 @@ const slice = createSlice({
         },
       };
     },
+    updatePin: (state) => ({
+      ...state,
+      isUpdatingPin: true,
+    }),
+    updatePinFailure: (state, action) => ({
+      ...state,
+      isUpdatingPin: false,
+      updatePinErrors: action.payload,
+    }),
+    updatePinSuccess: (state, action) => ({
+      ...state,
+      pins: {
+        ...state.pins,
+        [action.payload.id]: action.payload
+      },
+      updatePinErrors: null,
+    }),
     uploadImage: (state) => ({
       ...state,
       isUploadingImage: true,
@@ -138,6 +157,22 @@ export const epics = {
       })
     ),
 
+  updatePin: (action$, state$) =>
+    action$.pipe(
+      ofType(actions.updatePin),
+      mergeMap((action) => {
+        const token = authSelectors.selectToken(state$.value);
+        const {
+          payload: { cost, id, imageUrl, name },
+        } = action;
+        console.log(action.payload);
+        return from(api.updatePin(token, id, name, cost, imageUrl)).pipe(
+          map((pin) => actions.updatePinSuccess(pin)),
+          catchError((error) => of(actions.updatePinFailure(error)))
+        );
+      })
+    ),
+
   uploadImage: (action$, state$) =>
     action$.pipe(
       ofType(actions.uploadImage),
@@ -163,6 +198,7 @@ export const selectors = {
   selectImageUrl: (state) => state.pins.imageUrl,
   selectPins: (state) => state.pins.pins,
   selectPin: (id) => (state) => state.pins.pins[id],
+  selectUpdatePinErrors: (state) => state.pins.updatePinErrors,
 };
 
 export default slice.reducer;

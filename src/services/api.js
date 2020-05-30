@@ -62,6 +62,13 @@ const setPinStatus = async (token, pinId, isAvailable) => {
   return makeRequest(url, requestSettings);
 };
 
+const updatePin = async (token, id, name, cost, imageUrl) => {
+  const url = `${settings.apiUrl}/pins/${id}/`;
+  const body = { cost, name, imageUrl };
+  const requestSettings = buildSettings({ token, method: 'PATCH', body });
+  return makeRequest(url, requestSettings);
+};
+
 const uploadImage = async (token, image) => {
   const url = `${settings.apiUrl}/pin-images/`;
   const requestSettings = buildSettings({
@@ -77,5 +84,6 @@ export default {
   getOrders,
   getPins,
   setPinStatus,
+  updatePin,
   uploadImage,
 };

@@ -54,7 +54,7 @@ const PinDetails = () => {
   const [cost, setCost] = useState('');
   const createPinErrors = useSelector(pinSelectors.selectCreatePinErrors);
   const dispatch = useDispatch();
-  const imageUrl = useSelector(pinSelectors.selectImageUrl);
+  const [hasSubmittedForm, setHasSubmittedForm] = useState(false);
   const [isCostDirty, setIsCostDirty] = useState(false);
   const isCreatingPin = useSelector(pinSelectors.isCreatingPin);
   const [isImageDirty, setIsImageDirty] = useState(false);
@@ -64,12 +64,15 @@ const PinDetails = () => {
   const {
     params: { id: pinId },
   } = useRouteMatch();
-  const [hasSubmittedForm, setHasSubmittedForm] = useState(false);
+  const updatePinErrors = useSelector(pinSelectors.selectUpdatePinErrors);
+  const uploadedImageUrl = useSelector(pinSelectors.selectImageUrl);
 
   const isUpdate = pinId !== 'new';
   const pin = useSelector(pinSelectors.selectPin(pinId));
 
   const hasLoaded = !!pin;
+
+  const imageUrl = uploadedImageUrl || pin?.imageUrl;
 
   const submitForm = () => {
     if (
@@ -77,7 +80,10 @@ const PinDetails = () => {
       !getCostError(cost) &&
       !getImageError(imageUrl, isUploadingImage)
     ) {
-      dispatch(pinActions.createPin({ cost, imageUrl, name }));
+      if (isUpdate)
+        dispatch(pinActions.updatePin({ cost, id: pin.id, imageUrl, name }));
+      else
+        dispatch(pinActions.createPin({ cost, imageUrl, name }));
       setHasSubmittedForm(true);
     }
     setIsNameDirty(true);
@@ -144,7 +150,7 @@ const PinDetails = () => {
             <Submit isDisabled={isCreatingPin} isLoading={isCreatingPin}>
               {isUpdate ? 'Update pin' : 'Create pin'}
             </Submit>
-            {createPinErrors && <Error>Could not create pin</Error>}
+            {(createPinErrors || updatePinErrors) && <Error>Could not create pin</Error>}
           </>
         )}
       </Form>
