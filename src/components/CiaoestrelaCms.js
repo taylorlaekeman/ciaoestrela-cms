@@ -10,7 +10,6 @@ import Listings from 'components/Listings';
 import LoadingIndicator from 'components/LoadingIndicator';
 import Login from 'components/Login';
 import OrderPanel from 'components/OrderPanel';
-import PinCreator from 'components/PinCreator';
 import { actions as authActions } from 'state/auth';
 
 const Main = styled.main`
@@ -61,11 +60,8 @@ const CiaoestrelaCms = () => {
           <Route path="/orders">
             <OrderPanel />
           </Route>
-          <Route exact path="/listings">
+          <Route path="/listings">
             <Listings />
-          </Route>
-          <Route path="/listings/pins/new">
-            <PinCreator />
           </Route>
           <Route path="/">
             <Home />

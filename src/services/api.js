@@ -1,23 +1,29 @@
 import settings from 'settings';
 
-const buildSettings = (token, method = 'GET', body = {}) => {
+const buildSettings = ({ token, method = 'GET', body = {}, file = null }) => {
   const requestSettings = {
     headers: {
       Authorization: `Bearer ${token}`,
-      'Content-Type': 'application/json',
     },
     method,
   };
-  if (method !== 'GET') requestSettings.body = JSON.stringify(body);
+  if (method !== 'GET' && Object.entries(body).length > 0)
+    requestSettings.body = JSON.stringify(body);
+  if (method !== 'GET' && file) {
+    requestSettings.body = file;
+    requestSettings.headers['Content-Disposition'] =
+      'attachment; filename="image.png"';
+  } else {
+    requestSettings.headers['Content-Type'] = 'application/json';
+  }
   return requestSettings;
 };
 
-const createPin = async (token, name, cost) => {
+const createPin = async (token, name, cost, imageUrl) => {
   const url = `${settings.apiUrl}/pins/`;
-  const body = { cost, name };
-  const requestSettings = buildSettings(token, 'POST', body);
-  const response = await makeRequest(url, requestSettings);
-  return response;
+  const body = { cost, name, imageUrl };
+  const requestSettings = buildSettings({ token, method: 'POST', body });
+  return makeRequest(url, requestSettings);
 };
 
 const getItemsById = (items) => {
@@ -30,14 +36,14 @@ const getItemsById = (items) => {
 
 const getOrders = async (token) => {
   const url = `${settings.apiUrl}/orders/`;
-  const requestSettings = buildSettings(token);
+  const requestSettings = buildSettings({ token });
   const orders = await makeRequest(url, requestSettings);
   return getItemsById(orders);
 };
 
 const getPins = async (token) => {
   const url = `${settings.apiUrl}/pins/`;
-  const requestSettings = buildSettings(token);
+  const requestSettings = buildSettings({ token });
   const pins = await makeRequest(url, requestSettings);
   return getItemsById(pins);
 };
@@ -52,7 +58,24 @@ const makeRequest = async (url, requestSettings) => {
 const setPinStatus = async (token, pinId, isAvailable) => {
   const url = `${settings.apiUrl}/pins/${pinId}/`;
   const body = { isAvailable };
-  const requestSettings = buildSettings(token, 'PATCH', body);
+  const requestSettings = buildSettings({ token, method: 'PATCH', body });
+  return makeRequest(url, requestSettings);
+};
+
+const updatePin = async (token, id, name, cost, imageUrl) => {
+  const url = `${settings.apiUrl}/pins/${id}/`;
+  const body = { cost, name, imageUrl };
+  const requestSettings = buildSettings({ token, method: 'PATCH', body });
+  return makeRequest(url, requestSettings);
+};
+
+const uploadImage = async (token, image) => {
+  const url = `${settings.apiUrl}/pin-images/`;
+  const requestSettings = buildSettings({
+    token,
+    method: 'POST',
+    file: image[0],
+  });
   return makeRequest(url, requestSettings);
 };
 
@@ -61,4 +84,6 @@ export default {
   getOrders,
   getPins,
   setPinStatus,
+  updatePin,
+  uploadImage,
 };

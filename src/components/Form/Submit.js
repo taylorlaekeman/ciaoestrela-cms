@@ -1,9 +1,44 @@
-import styled from 'styled-components';
+import PropTypes from 'prop-types';
+import React from 'react';
 
-const addProps = () => ({ type: 'submit' });
+import Button from 'components/Button';
 
-const Submit = styled.button.attrs(addProps)`
-  ${(props) => props.theme.components.button.primary}
-`;
+const Submit = ({
+  area,
+  children,
+  className,
+  isDisabled,
+  isLoading,
+  onClick,
+}) => (
+  <Button
+    area={area}
+    className={className}
+    isDisabled={isDisabled}
+    isLoading={isLoading}
+    onClick={onClick}
+    type="submit"
+  >
+    {children}
+  </Button>
+);
+
+Submit.defaultProps = {
+  area: '',
+  children: '',
+  className: '',
+  isDisabled: false,
+  isLoading: false,
+  onClick: () => {},
+};
+
+Submit.propTypes = {
+  area: PropTypes.string,
+  children: PropTypes.node,
+  className: PropTypes.string,
+  isDisabled: PropTypes.bool,
+  isLoading: PropTypes.bool,
+  onClick: PropTypes.func,
+};
 
 export default Submit;

@@ -3,20 +3,11 @@ import React from 'react';
 import styled from 'styled-components';
 
 import Error from './Error';
-import FileList from './FileList';
 
 const addProps = () => ({ type: 'file' });
 
 const ClickableLabel = styled.label`
-  background-color: ${(props) =>
-    props.theme.colours.background.buttonSecondary};
-  border: solid ${(props) => props.theme.colours.border.buttonSecondary} 1px;
-  border-radius: ${(props) => (props.value ? '0 0 4px 4px' : '4px')};
-  box-sizing: border-box;
-  color: ${(props) => props.theme.colours.text.buttonSecondary};
-  display: inline-block;
-  padding: 8px 16px;
-  width: 100%;
+  ${({ theme }) => theme.components.button.secondary}
 `;
 
 const FileInput = styled.input.attrs(addProps)`
@@ -27,38 +18,48 @@ const FileInput = styled.input.attrs(addProps)`
   width: 100%;
 `;
 
-const Upload = ({ accept, className, error, onChange, text, value }) => (
-  <section className={className}>
-    <FileInput
-      accept={accept}
-      files={value}
-      id={text}
-      onChange={(event) => onChange(event.target.files)}
-    />
-    {value && <FileList files={value} />}
-    <ClickableLabel htmlFor={text} value={value}>
-      {text}
-    </ClickableLabel>
-    {error && <Error htmlFor={text}>{error}</Error>}
-  </section>
-);
+const Image = styled.img`
+  border: solid ${({ theme }) => theme.colours.border.button.secondary} 1px;
+  border-radius: 4px;
+  padding: 0 25%;
+  width: 100%;
+`;
+
+const Upload = ({ accept, children, className, error, onChange, value }) => {
+  const id = `upload-${children}`;
+  return (
+    <section className={className}>
+      <FileInput
+        accept={accept}
+        files={value}
+        id={id}
+        onChange={(event) => onChange(event.target.files)}
+      />
+      {value && <Image src={value} />}
+      <ClickableLabel htmlFor={id} value={value}>
+        {children}
+      </ClickableLabel>
+      {error && <Error htmlFor={id}>{error}</Error>}
+    </section>
+  );
+};
 
 Upload.defaultProps = {
   accept: '',
+  children: '',
   className: '',
   error: '',
   onChange: () => {},
-  text: '',
   value: null,
 };
 
 Upload.propTypes = {
   accept: PropTypes.string,
+  children: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
   className: PropTypes.string,
   error: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
   onChange: PropTypes.func,
-  text: PropTypes.string,
-  value: PropTypes.shape({}),
+  value: PropTypes.string,
 };
 
 export default Upload;
