@@ -72,7 +72,7 @@ const PinDetails = () => {
 
   const hasLoaded = !!pin;
 
-  const imageUrl = uploadedImageUrl || pin?.imageUrl;
+  const imageUrl = uploadedImageUrl || (pin && pin.imageUrl);
 
   const submitForm = () => {
     if (
@@ -82,8 +82,7 @@ const PinDetails = () => {
     ) {
       if (isUpdate)
         dispatch(pinActions.updatePin({ cost, id: pin.id, imageUrl, name }));
-      else
-        dispatch(pinActions.createPin({ cost, imageUrl, name }));
+      else dispatch(pinActions.createPin({ cost, imageUrl, name }));
       setHasSubmittedForm(true);
     }
     setIsNameDirty(true);
@@ -139,7 +138,7 @@ const PinDetails = () => {
                 dispatch(pinActions.uploadImage(newImage));
                 setIsImageDirty(true);
               }}
-              value={imageUrl || (pin && pin.imageUrl)}
+              value={imageUrl}
             >
               {isUploadingImage ? (
                 <LoadingIndicator />
@@ -150,7 +149,9 @@ const PinDetails = () => {
             <Submit isDisabled={isCreatingPin} isLoading={isCreatingPin}>
               {isUpdate ? 'Update pin' : 'Create pin'}
             </Submit>
-            {(createPinErrors || updatePinErrors) && <Error>Could not create pin</Error>}
+            {(createPinErrors || updatePinErrors) && (
+              <Error>Could not create pin</Error>
+            )}
           </>
         )}
       </Form>

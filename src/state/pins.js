@@ -94,7 +94,7 @@ const slice = createSlice({
       ...state,
       pins: {
         ...state.pins,
-        [action.payload.id]: action.payload
+        [action.payload.id]: action.payload,
       },
       updatePinErrors: null,
     }),
@@ -165,7 +165,6 @@ export const epics = {
         const {
           payload: { cost, id, imageUrl, name },
         } = action;
-        console.log(action.payload);
         return from(api.updatePin(token, id, name, cost, imageUrl)).pipe(
           map((pin) => actions.updatePinSuccess(pin)),
           catchError((error) => of(actions.updatePinFailure(error)))
