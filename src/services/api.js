@@ -19,6 +19,13 @@ const buildSettings = ({ token, method = 'GET', body = {}, file = null }) => {
   return requestSettings;
 };
 
+const createCard = async (token, name, cost, imageUrl) => {
+  const url = `${settings.apiUrl}/cards/`;
+  const body = { cost, name, imageUrl };
+  const requestSettings = buildSettings({ token, method: 'POST', body });
+  return makeRequest(url, requestSettings);
+};
+
 const createPin = async (token, name, cost, imageUrl) => {
   const url = `${settings.apiUrl}/pins/`;
   const body = { cost, name, imageUrl };
@@ -69,8 +76,12 @@ const updatePin = async (token, id, name, cost, imageUrl) => {
   return makeRequest(url, requestSettings);
 };
 
-const uploadImage = async (token, image) => {
-  const url = `${settings.apiUrl}/pin-images/`;
+const uploadCardImage = async (token, image) => {
+  const url = `${settings.apiUrl}/card-images/`;
+  return uploadImage(token, url, image);
+};
+
+const uploadImage = async (token, url, image) => {
   const requestSettings = buildSettings({
     token,
     method: 'POST',
@@ -79,11 +90,19 @@ const uploadImage = async (token, image) => {
   return makeRequest(url, requestSettings);
 };
 
+const uploadPinImage = async (token, image) => {
+  const url = `${settings.apiUrl}/pin-images/`;
+  return uploadImage(token, url, image);
+};
+
 export default {
+  createCard,
   createPin,
+  getCards,
   getOrders,
   getPins,
   setPinStatus,
   updatePin,
-  uploadImage,
+  uploadCardImage,
+  uploadPinImage,
 };

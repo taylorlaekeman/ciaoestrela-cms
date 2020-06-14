@@ -178,7 +178,7 @@ export const epics = {
       mergeMap((action) => {
         const image = action.payload;
         const token = authSelectors.selectToken(state$.value);
-        return from(api.uploadImage(token, image)).pipe(
+        return from(api.uploadPinImage(token, image)).pipe(
           map((imageUrl) => actions.uploadImageSuccess(imageUrl)),
           catchError((error) => of(actions.uploadImageFailure(error)))
         );

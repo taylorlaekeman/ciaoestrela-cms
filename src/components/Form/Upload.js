@@ -1,7 +1,8 @@
 import PropTypes from 'prop-types';
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 
+import LoadingIndicator from 'components/LoadingIndicator';
 import Error from './Error';
 
 const addProps = () => ({ type: 'file' });
@@ -25,22 +26,44 @@ const Image = styled.img`
   width: 100%;
 `;
 
-const Upload = ({ accept, children, className, error, onChange, value }) => {
+const Wrapper = styled.section`
+  margin-bottom: 16px;
+`;
+
+const Upload = ({
+  accept,
+  children,
+  className,
+  error,
+  hasSubmitted,
+  isLoading,
+  onChange,
+  value,
+}) => {
   const id = `upload-${children}`;
+  const [isDirty, setIsDirty] = useState(false);
+
+  const hasVisibleError = !isLoading && (hasSubmitted || isDirty) && error;
+
   return (
-    <section className={className}>
+    <Wrapper className={className}>
       <FileInput
         accept={accept}
         files={value}
         id={id}
-        onChange={(event) => onChange(event.target.files)}
+        onBlur={() => setIsDirty(true)}
+        onChange={(event) => {
+          setIsDirty(true);
+          onChange(event.target.files);
+        }}
+        onClick={() => setIsDirty(true)}
       />
       {value && <Image src={value} />}
       <ClickableLabel htmlFor={id} value={value}>
-        {children}
+        {isLoading ? <LoadingIndicator /> : children}
       </ClickableLabel>
-      {error && <Error htmlFor={id}>{error}</Error>}
-    </section>
+      {hasVisibleError && <Error htmlFor={id}>{error}</Error>}
+    </Wrapper>
   );
 };
 
@@ -49,6 +72,8 @@ Upload.defaultProps = {
   children: '',
   className: '',
   error: '',
+  hasSubmitted: false,
+  isLoading: false,
   onChange: () => {},
   value: null,
 };
@@ -58,6 +83,8 @@ Upload.propTypes = {
   children: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
   className: PropTypes.string,
   error: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
+  hasSubmitted: PropTypes.bool,
+  isLoading: PropTypes.bool,
   onChange: PropTypes.func,
   value: PropTypes.string,
 };
