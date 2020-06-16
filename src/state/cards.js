@@ -13,6 +13,7 @@ const initialState = {
   imageUrl: null,
   isCreatingCard: false,
   isFetchingCards: false,
+  isSettingStatus: {},
   isUploadingImage: false,
 };
 
@@ -54,6 +55,37 @@ const slice = createSlice({
       ...state,
       cards: action.payload,
       isFetchingCards: false,
+    }),
+
+    setStatus: (state, action) => ({
+      ...state,
+      isSettingStatus: {
+        ...state.isSettingStatus,
+        [action.payload.id]: true,
+      },
+    }),
+
+    setStatusFailure: (state, action) => ({
+      ...state,
+      isSettingStatus: {
+        ...state.isSettingStatus,
+        [action.payload.id]: false,
+      },
+    }),
+
+    setStatusSuccess: (state, action) => ({
+      ...state,
+      cards: {
+        ...state.cards,
+        [action.payload.id]: {
+          ...state.cards[action.payload.id],
+          isAvailable: action.payload.isAvailable,
+        },
+      },
+      isSettingStatus: {
+        ...state.isSettingStatus,
+        [action.payload.id]: false,
+      },
     }),
 
     uploadImage: (state) => ({
@@ -102,6 +134,19 @@ export const epics = {
       })
     ),
 
+  setStatus: (action$, state$) =>
+    action$.pipe(
+      ofType(actions.setStatus),
+      mergeMap((action) => {
+        const { id, status } = action.payload;
+        const token = authSelectors.selectToken(state$.value);
+        return from(api.setCardStatus(token, id, status)).pipe(
+          map((card) => actions.setStatusSuccess(card)),
+          catchError((error) => of(actions.setStatusFailure({ error, id })))
+        );
+      })
+    ),
+
   uploadImage: (action$, state$) =>
     action$.pipe(
       ofType(actions.uploadImage),
@@ -120,6 +165,8 @@ export const epics = {
 
 export const isCreatingCard = (state) => state.cards.isCreatingCard;
 
+export const isSettingStatus = (state) => state.cards.isSettingStatus;
+
 export const isUploadingImage = (state) => state.cards.isUploadingImage;
 
 export const selectCards = (state) => state.cards.cards;
@@ -130,6 +177,7 @@ export const selectImageUrl = (state) => state.cards.imageUrl;
 
 export const selectors = {
   isCreatingCard,
+  isSettingStatus,
   isUploadingImage,
   selectCards,
   selectErrors,

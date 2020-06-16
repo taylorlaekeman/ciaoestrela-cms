@@ -41,10 +41,10 @@ const colours = {
       secondary: palette.neutral[200],
     },
     customCard: palette.primary[100],
-    footer: palette.neutral[100],
+    footer: palette.neutral[200],
     header: palette.neutral[100],
     order: palette.neutral[100],
-    page: palette.neutral[200],
+    page: palette.neutral[300],
     panel: palette.neutral[100],
     toggle: {
       off: palette.error[200],
@@ -69,7 +69,7 @@ const colours = {
     },
   },
   fill: {
-    icon: palette.neutral[700],
+    icon: palette.neutral[500],
     toggle: {
       off: palette.neutral[100],
       on: palette.neutral[100],
@@ -83,6 +83,7 @@ const colours = {
     },
     body: palette.neutral[900],
     customCard: palette.primary[900],
+    empty: palette.neutral[700],
     error: palette.error[500],
     label: palette.neutral[700],
     subtitle: palette.neutral[600],
