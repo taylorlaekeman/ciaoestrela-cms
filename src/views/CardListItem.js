@@ -43,7 +43,6 @@ const Wrapper = styled.li`
 const CardListItem = ({ card, isLoading }) => {
   const { cost, id, isAvailable, name } = card;
   const dispatch = useDispatch();
-  console.log(card);
   return (
     <Wrapper isAvailable={isAvailable}>
       <Title>{name}</Title>
