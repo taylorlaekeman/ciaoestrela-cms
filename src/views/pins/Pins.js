@@ -4,10 +4,10 @@ import { Route, Switch } from 'react-router-dom';
 import styled from 'styled-components';
 
 import Link from 'components/Link';
-import PinDetails from 'components/PinDetails';
-import PinList from 'components/PinList';
 import { selectors as authSelectors } from 'state/auth';
 import { actions as pinActions, selectors as pinSelectors } from 'state/pins';
+import PinDetails from 'views/pins/PinDetails';
+import PinList from 'views/pins/PinList';
 
 const Footer = styled.footer`
   background-color: ${({ theme }) => theme.colours.background.footer};
@@ -44,7 +44,7 @@ const Listings = () => {
       <Route path="/listings/pins/:id">
         <PinDetails />
       </Route>
-      <Route path="/listings">
+      <Route path="/listings/pins">
         <Wrapper>
           <Header>
             <Title>Pins</Title>

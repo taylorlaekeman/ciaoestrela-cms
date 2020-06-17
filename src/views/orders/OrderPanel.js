@@ -3,12 +3,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 
 import LoadingIndicator from 'components/LoadingIndicator';
-import Order from 'components/Order';
 import { selectors as authSelectors } from 'state/auth';
 import {
   actions as orderActions,
   selectors as orderSelectors,
 } from 'state/orders';
+import Order from 'views/orders/Order';
 
 const Header = styled.header`
   padding: 32px;

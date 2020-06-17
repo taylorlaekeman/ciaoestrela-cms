@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import styled from 'styled-components';
 
-import CustomCard from 'components/CustomCard';
+import CustomCard from 'views/orders/CustomCard';
 
 const ClickableOrder = styled.button`
   background: none;

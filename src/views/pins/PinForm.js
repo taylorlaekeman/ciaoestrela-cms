@@ -6,32 +6,28 @@ import styled from 'styled-components';
 import UnstyledForm from 'components/Form';
 import Error from 'components/Form/Error';
 import Input from 'components/Form/Input';
-import Upload from 'components/Form/Upload';
 import Submit from 'components/Form/Submit';
-import {
-  actions as cardActions,
-  selectors as cardSelectors,
-} from 'state/cards';
+import Upload from 'components/Form/Upload';
+import { actions as pinActions, selectors as pinSelectors } from 'state/pins';
 
 const Form = styled(UnstyledForm)`
   ${({ theme }) => theme.components.panel}
-  margin: 16px;
+  margin: 0 16px;
   padding: 32px;
 `;
 
-const Title = styled.h2`
-  font-size: 1.2rem;
-  font-weight: 400;
-  margin: 0;
-  margin-bottom: 32px;
-  padding: 0;
-`;
-
-const CardForm = ({ defaults, errors, imageUrl, isLoading, onSave }) => {
+const PinForm = ({
+  defaults,
+  errors,
+  imageUrl,
+  isLoading,
+  onSave,
+  submitText,
+}) => {
   const [cost, setCost] = useState(defaults.cost);
   const dispatch = useDispatch();
   const [hasSubmitted, setHasSubmitted] = useState(false);
-  const isUploadingImage = useSelector(cardSelectors.isUploadingImage);
+  const isUploadingImage = useSelector(pinSelectors.isUploadingImage);
   const [name, setName] = useState(defaults.name);
 
   const costError =
@@ -48,7 +44,6 @@ const CardForm = ({ defaults, errors, imageUrl, isLoading, onSave }) => {
         if (!costError && !imageError && !nameError) onSave(name, cost);
       }}
     >
-      <Title>Create a card</Title>
       <Input
         error={nameError}
         hasSubmitted={hasSubmitted}
@@ -65,21 +60,22 @@ const CardForm = ({ defaults, errors, imageUrl, isLoading, onSave }) => {
         value={cost}
       />
       <Upload
+        accept=".png"
         error={imageError}
         hasSubmitted={hasSubmitted}
         isLoading={isUploadingImage}
-        onChange={(newImage) => dispatch(cardActions.uploadImage(newImage))}
+        onChange={(newImage) => dispatch(pinActions.uploadImage(newImage))}
         value={imageUrl}
       >
         Click to upload an image
       </Upload>
-      <Submit isLoading={isLoading}>Create card</Submit>
-      {Object.values(errors).length > 0 && <Error>Could not create card</Error>}
+      <Submit isLoading={isLoading}>{submitText}</Submit>
+      {errors && <Error>Could not create pin</Error>}
     </Form>
   );
 };
 
-CardForm.defaultProps = {
+PinForm.defaultProps = {
   defaults: {
     cost: '',
     name: '',
@@ -88,9 +84,10 @@ CardForm.defaultProps = {
   imageUrl: '',
   isLoading: false,
   onSave: () => {},
+  submitText: '',
 };
 
-CardForm.propTypes = {
+PinForm.propTypes = {
   defaults: PropTypes.shape({
     cost: PropTypes.string,
     name: PropTypes.string,
@@ -99,6 +96,7 @@ CardForm.propTypes = {
   imageUrl: PropTypes.string,
   isLoading: PropTypes.bool,
   onSave: PropTypes.func,
+  submitText: PropTypes.string,
 };
 
-export default CardForm;
+export default PinForm;

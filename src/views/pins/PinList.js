@@ -4,8 +4,8 @@ import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 
 import LoadingIndicator from 'components/LoadingIndicator';
-import Pin from 'components/Pin';
 import { selectors as pinSelectors } from 'state/pins';
+import Pin from 'views/pins/Pin';
 
 const CenteringWrapper = styled.div`
   align-items: center;

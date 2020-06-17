@@ -4,10 +4,10 @@ import { Provider as ReduxProvider } from 'react-redux';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
 
-import CiaoestrelaCms from 'components/CiaoestrelaCms';
 import store from 'state';
 import GlobalStyles from 'styles/GlobalStyles';
 import theme from 'styles/theme';
+import CiaoestrelaCms from 'views/CiaoestrelaCms';
 
 const App = () => (
   <ReduxProvider store={store}>

@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 import UnstyledLink from 'components/Link';
 import { selectors as cardSelectors } from 'state/cards';
-import CardListItem from 'views/CardListItem';
+import CardListItem from 'views/cards/CardListItem';
 
 const Empty = styled.p`
   color: ${({ theme }) => theme.colours.text.empty};

@@ -7,7 +7,7 @@ import {
   actions as cardActions,
   selectors as cardSelectors,
 } from 'state/cards';
-import CardForm from 'views/CardForm';
+import CardForm from 'views/cards/CardForm';
 
 const CardDetails = () => {
   const cards = useSelector(cardSelectors.selectCards);
@@ -51,6 +51,7 @@ const CardDetails = () => {
         else dispatch(cardActions.createCard({ cost, imageUrl, name }));
         setHasSaved(true);
       }}
+      submitText={isUpdate ? 'Update card' : 'Create card'}
     />
   );
 };

@@ -4,8 +4,8 @@ import { Route, Switch } from 'react-router-dom';
 
 import { selectors as authSelectors } from 'state/auth';
 import { actions as cardActions } from 'state/cards';
-import CardDetails from 'views/CardDetails';
-import CardList from 'views/CardList';
+import CardDetails from 'views/cards/CardDetails';
+import CardList from 'views/cards/CardList';
 
 const Cards = () => {
   const dispatch = useDispatch();

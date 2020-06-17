@@ -9,6 +9,7 @@ import { selectors as authSelectors } from 'state/auth';
 const initialState = {
   createPinErrors: null,
   fetchPinsErrors: null,
+  hasFetched: false,
   imageUrl: null,
   isCreatingPin: false,
   isFetchingPins: false,
@@ -38,10 +39,15 @@ const slice = createSlice({
         [action.payload.id]: action.payload,
       },
     }),
-    fetchPins: (state) => ({ ...state, isFetchingPins: true }),
+    fetchPins: (state) => ({
+      ...state,
+      hasFetched: true,
+      isFetchingPins: true,
+    }),
     fetchPinsFailure: (state, action) => ({
       ...state,
       fetchPinsErrors: action.payload,
+      hasFetched: true,
       isFetchingPins: false,
     }),
     fetchPinsSuccess: (state, action) => ({
@@ -186,9 +192,18 @@ export const epics = {
     ),
 };
 
+// selectors
+
+export const hasFetched = (state) => state.pins.hasFetched;
+
+export const isSaving = (state) =>
+  state.pins.isCreatingPin || state.pins.isUploadingPin;
+
 export const selectors = {
+  hasFetched,
   isCreatingPin: (state) => state.pins.isCreatingPin,
   isFetchingPins: (state) => state.pins.isFetchingPins,
+  isSaving,
   isSettingStatus: (pinId) => (state) =>
     state.pins.isSettingStatus[pinId] || false,
   isUploadingImage: (state) => state.pins.isUploadingImage,
@@ -196,7 +211,6 @@ export const selectors = {
   selectFetchPinsErrors: (state) => state.pins.fetchPinsErrors,
   selectImageUrl: (state) => state.pins.imageUrl,
   selectPins: (state) => state.pins.pins,
-  selectPin: (id) => (state) => state.pins.pins[id],
   selectUpdatePinErrors: (state) => state.pins.updatePinErrors,
 };
 

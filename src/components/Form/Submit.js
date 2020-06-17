@@ -14,7 +14,7 @@ const Submit = ({
   <Button
     area={area}
     className={className}
-    isDisabled={isDisabled}
+    isDisabled={isDisabled || isLoading}
     isLoading={isLoading}
     onClick={onClick}
     type="submit"

@@ -1,16 +1,13 @@
 import { useOktaAuth } from '@okta/okta-react';
 import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { Route, Switch } from 'react-router-dom';
 import styled from 'styled-components';
 
-import Header from 'components/Header';
-import Home from 'components/Home';
-import Listings from 'components/Listings';
 import LoadingIndicator from 'components/LoadingIndicator';
-import Login from 'components/Login';
-import OrderPanel from 'components/OrderPanel';
 import { actions as authActions } from 'state/auth';
+import Header from 'views/Header';
+import Home from 'views/Home';
+import Login from 'views/Login';
 
 const Main = styled.main`
   overflow: hidden;
@@ -56,17 +53,7 @@ const CiaoestrelaCms = () => {
     <Wrapper>
       <Header />
       <Main>
-        <Switch>
-          <Route path="/orders">
-            <OrderPanel />
-          </Route>
-          <Route path="/listings">
-            <Listings />
-          </Route>
-          <Route path="/">
-            <Home />
-          </Route>
-        </Switch>
+        <Home />
       </Main>
     </Wrapper>
   );
