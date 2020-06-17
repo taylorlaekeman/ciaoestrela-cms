@@ -14,6 +14,7 @@ const Cost = styled.p`
   font-size: 0.6rem;
   grid-area: cost;
   letter-spacing: 1px;
+  padding-right: 8px;
 `;
 
 const Title = styled.h3`
@@ -27,8 +28,8 @@ const Wrapper = styled.li`
   align-items: center;
   display: grid;
   grid-gap: 16px;
-  grid-template-areas: 'title cost . edit toggle';
-  grid-template-columns: auto auto 1fr auto auto;
+  grid-template-areas: 'title . cost edit toggle';
+  grid-template-columns: auto 1fr auto auto auto;
   justify-content: space-between;
   list-style: none;
   padding: 16px 32px;
