@@ -6,6 +6,7 @@ import styled from 'styled-components';
 import EditIcon from 'components/EditIcon';
 import Form from 'components/Form';
 import Toggle from 'components/Form/Toggle';
+import Link from 'components/Link';
 import LoadingIndicator from 'components/LoadingIndicator';
 import { actions as cardActions } from 'state/cards';
 
@@ -24,20 +25,13 @@ const Title = styled.h3`
 
 const Wrapper = styled.li`
   align-items: center;
-  border-right: solid
-    ${({ isAvailable, theme }) =>
-      isAvailable
-        ? theme.colours.border.pin.active
-        : theme.colours.border.pin.disabled}
-    4px;
   display: grid;
   grid-gap: 16px;
   grid-template-areas: 'title cost . edit toggle';
   grid-template-columns: auto auto 1fr auto auto;
   justify-content: space-between;
   list-style: none;
-  padding: 16px;
-  padding-left: 20px;
+  padding: 16px 32px;
 `;
 
 const CardListItem = ({ card, isLoading }) => {
@@ -47,7 +41,9 @@ const CardListItem = ({ card, isLoading }) => {
     <Wrapper isAvailable={isAvailable}>
       <Title>{name}</Title>
       <Cost>{`$ ${cost}`}</Cost>
-      <EditIcon area="edit" />
+      <Link area="edit" to={`/listings/cards/${card.id}`}>
+        <EditIcon />
+      </Link>
       {isLoading ? (
         <LoadingIndicator area="toggle" />
       ) : (

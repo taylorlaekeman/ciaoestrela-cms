@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Redirect } from 'react-router-dom';
+import { Redirect, useParams } from 'react-router-dom';
 
+import LoadingIndicator from 'components/LoadingIndicator';
 import {
   actions as cardActions,
   selectors as cardSelectors,
@@ -9,22 +10,45 @@ import {
 import CardForm from 'views/CardForm';
 
 const CardDetails = () => {
+  const cards = useSelector(cardSelectors.selectCards);
   const dispatch = useDispatch();
-  const errors = useSelector(cardSelectors.selectErrors);
+  const createErrors = useSelector(cardSelectors.selectCreateErrors);
+  const hasFetched = useSelector(cardSelectors.hasFetched);
   const [hasSaved, setHasSaved] = useState(false);
+  const { id } = useParams();
   const imageUrl = useSelector(cardSelectors.selectImageUrl);
-  const isCreatingCard = useSelector(cardSelectors.isCreatingCard);
+  const isSaving = useSelector(cardSelectors.isSaving);
+  const updateErrors = useSelector(cardSelectors.selectUpdateErrors);
 
-  if (hasSaved && !isCreatingCard && Object.keys(errors).length === 0)
+  const card = cards[id];
+  const isUpdate = id !== 'new';
+
+  const errors = isUpdate ? updateErrors : createErrors;
+
+  if (!hasFetched) return <LoadingIndicator centered large />;
+
+  if (hasFetched && isUpdate && !card) return null;
+
+  if (hasSaved && !isSaving && Object.keys(errors).length === 0)
     return <Redirect to="/listings/cards" />;
 
   return (
     <CardForm
+      defaults={card}
       errors={errors}
-      imageUrl={imageUrl}
-      isLoading={isCreatingCard}
+      imageUrl={isUpdate ? card.imageUrl : imageUrl}
+      isLoading={isSaving}
       onSave={(name, cost) => {
-        dispatch(cardActions.createCard({ cost, imageUrl, name }));
+        if (isUpdate)
+          dispatch(
+            cardActions.updateCard({
+              cost,
+              id,
+              imageUrl: imageUrl || card.imageUrl,
+              name,
+            })
+          );
+        else dispatch(cardActions.createCard({ cost, imageUrl, name }));
         setHasSaved(true);
       }}
     />

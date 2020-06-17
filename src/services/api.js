@@ -85,11 +85,20 @@ const setStatus = async (token, url, isAvailable) => {
   return makeRequest(url, requestSettings);
 };
 
-const updatePin = async (token, id, name, cost, imageUrl) => {
-  const url = `${settings.apiUrl}/pins/${id}/`;
+const update = async (token, url, name, cost, imageUrl) => {
   const body = { cost, name, imageUrl };
   const requestSettings = buildSettings({ token, method: 'PATCH', body });
   return makeRequest(url, requestSettings);
+};
+
+const updateCard = async (token, id, name, cost, imageUrl) => {
+  const url = `${settings.apiUrl}/cards/${id}/`;
+  return update(token, url, name, cost, imageUrl);
+};
+
+const updatePin = async (token, id, name, cost, imageUrl) => {
+  const url = `${settings.apiUrl}/pins/${id}/`;
+  return update(token, url, name, cost, imageUrl);
 };
 
 const uploadCardImage = async (token, image) => {
@@ -119,6 +128,7 @@ export default {
   getPins,
   setCardStatus,
   setPinStatus,
+  updateCard,
   updatePin,
   uploadCardImage,
   uploadPinImage,

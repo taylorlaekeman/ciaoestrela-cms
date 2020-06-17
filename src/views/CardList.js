@@ -1,33 +1,31 @@
-import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React from 'react';
+import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 
 import UnstyledLink from 'components/Link';
-import { selectors as authSelectors } from 'state/auth';
-import {
-  actions as cardActions,
-  selectors as cardSelectors,
-} from 'state/cards';
+import { selectors as cardSelectors } from 'state/cards';
 import CardListItem from 'views/CardListItem';
 
 const Empty = styled.p`
   color: ${({ theme }) => theme.colours.text.empty};
   font-size: 0.85rem;
   margin: 0;
-  padding: 16px;
+  padding: 16px 32px;
 `;
 
 const Footer = styled.footer`
   background-color: ${({ theme }) => theme.colours.background.footer};
   border-radius: 0 0 4px 4px;
+  margin-top: 8px;
 `;
 
 const Header = styled.header`
-  padding: 16px;
+  padding: 32px;
+  padding-bottom: 8px;
 `;
 
 const Link = styled(UnstyledLink)`
-  padding: 16px;
+  padding: 16px 32px;
 `;
 
 const List = styled.ul`
@@ -51,13 +49,7 @@ const Wrapper = styled.article`
 
 const CardList = () => {
   const cards = useSelector(cardSelectors.selectCards);
-  const dispatch = useDispatch();
   const isSettingStatus = useSelector(cardSelectors.isSettingStatus);
-  const token = useSelector(authSelectors.selectToken);
-
-  useEffect(() => {
-    if (token) dispatch(cardActions.fetchCards());
-  }, [dispatch, token]);
 
   return (
     <Wrapper>

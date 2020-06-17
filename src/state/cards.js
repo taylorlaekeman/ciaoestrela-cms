@@ -11,10 +11,13 @@ const initialState = {
   createCardErrors: {},
   fetchCardsError: null,
   imageUrl: null,
+  hasFetched: false,
   isCreatingCard: false,
   isFetchingCards: false,
   isSettingStatus: {},
+  isUpdating: false,
   isUploadingImage: false,
+  updateErrors: {},
 };
 
 const slice = createSlice({
@@ -48,12 +51,14 @@ const slice = createSlice({
     fetchCardsFailure: (state, action) => ({
       ...state,
       fetchCardsError: action.payload,
+      hasFetched: true,
       isFetchingCards: false,
     }),
 
     fetchCardsSuccess: (state, action) => ({
       ...state,
       cards: action.payload,
+      hasFetched: true,
       isFetchingCards: false,
     }),
 
@@ -85,6 +90,24 @@ const slice = createSlice({
       isSettingStatus: {
         ...state.isSettingStatus,
         [action.payload.id]: false,
+      },
+    }),
+
+    updateCard: (state) => ({ ...state, isUpdating: true }),
+
+    updateCardFailure: (state, action) => ({
+      ...state,
+      updateErrors: action.payload,
+      isUpdating: false,
+    }),
+
+    updateCardSuccess: (state, action) => ({
+      ...state,
+      updateErrors: {},
+      isUpdating: false,
+      cards: {
+        ...state.cards,
+        [action.payload.id]: action.payload,
       },
     }),
 
@@ -147,6 +170,19 @@ export const epics = {
       })
     ),
 
+  updateCard: (action$, state$) =>
+    action$.pipe(
+      ofType(actions.updateCard),
+      mergeMap((action) => {
+        const token = authSelectors.selectToken(state$.value);
+        const { cost, id, imageUrl, name } = action.payload;
+        return from(api.updateCard(token, id, name, cost, imageUrl)).pipe(
+          map((card) => actions.updateCardSuccess(card)),
+          catchError((error) => of(actions.updateCardFailure(error)))
+        );
+      })
+    ),
+
   uploadImage: (action$, state$) =>
     action$.pipe(
       ofType(actions.uploadImage),
@@ -163,7 +199,12 @@ export const epics = {
 
 // selectors
 
+export const hasFetched = (state) => state.cards.hasFetched;
+
 export const isCreatingCard = (state) => state.cards.isCreatingCard;
+
+export const isSaving = (state) =>
+  state.cards.isCreatingCard || state.cards.isUpdating;
 
 export const isSettingStatus = (state) => state.cards.isSettingStatus;
 
@@ -171,17 +212,22 @@ export const isUploadingImage = (state) => state.cards.isUploadingImage;
 
 export const selectCards = (state) => state.cards.cards;
 
-export const selectErrors = (state) => state.cards.createCardErrors;
+export const selectCreateErrors = (state) => state.cards.createCardErrors;
 
 export const selectImageUrl = (state) => state.cards.imageUrl;
 
+export const selectUpdateErrors = (state) => state.cards.updateErrors;
+
 export const selectors = {
+  hasFetched,
   isCreatingCard,
   isSettingStatus,
+  isSaving,
   isUploadingImage,
   selectCards,
-  selectErrors,
+  selectCreateErrors,
   selectImageUrl,
+  selectUpdateErrors,
 };
 
 export default slice.reducer;
